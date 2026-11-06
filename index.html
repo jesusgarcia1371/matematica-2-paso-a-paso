@@ -1,0 +1,2123 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}*{-webkit-text-size-adjust:100%}</style>
+<title>Matemática II paso a paso</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&display=swap">
+<style>
+/* Layout: una columna tipo cuaderno; cada ejercicio es una hoja, con señal, pasos y error común. */
+:root {
+  --bg: #f6f8fb; --sheet: #ffffff; --fg: #18222f; --muted: #566375;
+  --line: #d3dbe6; --grid: #e3e9f2; --accent: #1d4fa3; --accent-soft: #e8eefa;
+  --warn: #8a4b00; --warn-soft: #fbf1e2; --ok: #1b6b4a;
+  --display: "Literata", Georgia, serif;
+  --body: "Literata", Georgia, serif;
+  --label: "IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10151d; --sheet: #171e29; --fg: #e6ebf2; --muted: #a0adbd;
+  --line: #2e3949; --grid: #1f2835; --accent: #8db2f2; --accent-soft: #1f2c42;
+  --warn: #e8b872; --warn-soft: #33281a; --ok: #6fcfa4;
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --bg: #10151d; --sheet: #171e29; --fg: #e6ebf2; --muted: #a0adbd;
+  --line: #2e3949; --grid: #1f2835; --accent: #8db2f2; --accent-soft: #1f2c42;
+  --warn: #e8b872; --warn-soft: #33281a; --ok: #6fcfa4;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font: 400 1.0625rem/1.6 var(--body); }
+.wrap { max-width: 46rem; margin: 0 auto; padding-block: 0 4rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { background-color: var(--sheet); border-bottom: 1px solid var(--line);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px; }
+header.top .wrap { padding-block: 2.5rem 2rem; }
+h1 { font: 700 clamp(2rem, 6vw, 2.75rem)/1.15 var(--display); margin: 0 0 .75rem; text-wrap: balance; }
+.lede { margin: 0; max-width: 38rem; }
+.eyebrow { font: 600 .8125rem/1.3 var(--label); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin: 0 0 .5rem; }
+nav.jump { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }
+nav.jump a { font: 600 .9375rem/1 var(--label); color: var(--accent); background: var(--sheet);
+  border: 1px solid var(--accent); border-radius: 4px; padding: .55rem .75rem; text-decoration: none; }
+nav.jump a:hover { background: var(--accent-soft); }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section { margin-top: 3rem; scroll-margin-top: 1rem; }
+h2 { font: 700 1.625rem/1.25 var(--display); margin: 0 0 .5rem; text-wrap: balance; }
+h3 { font: 700 1.125rem/1.35 var(--display); margin: 1.5rem 0 .5rem; }
+p { margin: 0 0 1rem; }
+.note { color: var(--muted); font-size: .9375rem; }
+.table-box { overflow-x: auto; margin: 1rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .9688rem; }
+th { font: 600 .8125rem/1.3 var(--label); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); text-align: left; }
+th, td { padding: .6rem .75rem .6rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.sheet { background: var(--sheet); border: 1px solid var(--line); border-radius: 4px; padding: 1.25rem; margin-top: 1rem; }
+.q-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; margin-bottom: .35rem; }
+.q-head strong { font: 700 1.0625rem/1.4 var(--display); }
+.pts { font: 600 .875rem/1.3 var(--label); color: var(--accent); white-space: nowrap; }
+.signal { background: var(--accent-soft); border-radius: 4px; padding: .7rem .9rem; margin: .75rem 0 1rem; }
+.signal b, .trap b, .fin b { font: 600 .875rem/1.3 var(--label); letter-spacing: .03em; display: block; margin-bottom: .15rem; }
+.signal b { color: var(--accent); }
+.trap { background: var(--warn-soft); border-radius: 4px; padding: .7rem .9rem; margin-top: 1rem; }
+.trap b { color: var(--warn); }
+.fin { border-left: 3px solid var(--ok); padding-left: .9rem; margin-top: 1rem; }
+.fin b { color: var(--ok); }
+ol.steps { margin: 0; padding-left: 1.4rem; }
+ol.steps > li { margin-bottom: .9rem; padding-left: .2rem; }
+ol.route { margin: 0 0 1rem; padding-left: 1.4rem; }
+ol.route li { margin-bottom: .4rem; }
+details { margin-top: .6rem; }
+summary { font: 600 .9375rem/1.4 var(--label); color: var(--accent); cursor: pointer; padding-block: .25rem; }
+.sol { background: var(--accent-soft); border-radius: 4px; padding: .9rem 1rem; margin-top: .4rem; min-width: 0; }
+.sol p:last-child, .signal p:last-child, .trap p:last-child { margin-bottom: 0; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+ol.recipe { margin: 0 0 1rem; padding-left: 1.4rem; }
+ol.recipe li { margin-bottom: .45rem; }
+.type-head { border-top: 2px solid var(--fg); margin-top: 3rem; padding-top: 1rem; }
+.type-tag { font: 600 .8125rem/1.3 var(--label); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.item { padding-block: 1rem; border-bottom: 1px solid var(--line); }
+.item:last-child { border-bottom: 0; padding-bottom: 0; }
+.item:first-child { padding-top: 0; }
+.item-id { font: 600 .875rem/1.3 var(--label); color: var(--warn); }
+.item > p { margin-bottom: .25rem; }
+</style>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']],
+    macros: { sen: '\\operatorname{sen}', csch: '\\operatorname{csch}', sech: '\\operatorname{sech}', arcsen: '\\operatorname{arcsen}', dx: '\\,dx', dt: '\\,dt', du: '\\,du', dw: '\\,dw', dth: '\\,d\\theta' } },
+  options: { enableMenu: false },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+
+<header class="top"><div class="wrap">
+  <p class="eyebrow">Material de práctica no oficial · Primer parcial</p>
+  <h1>Matemática II paso a paso</h1>
+  <p class="lede">Aprende integrales desde cero, sabiendo solo derivar. Tienes una receta por cada tipo de ejercicio de un parcial real de Matemática II de la UCLA, 59 conchas de mango, un banco de 136 ejercicios y un parcial nuevo para practicar.</p>
+  <nav class="jump" aria-label="Ir a una sección">
+    <a href="#cero">1. Desde cero</a>
+    <a href="#kit">2. Herramientas</a>
+    <a href="#guia">3. Guía y conchas</a>
+    <a href="#banco">4. Banco</a>
+    <a href="#resuelto">5. Parcial resuelto</a>
+    <a href="#tu-parcial">6. Tu parcial</a>
+    <a href="#modelo-2">7. Modelo real 2</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+
+<section id="ruta">
+  <h2>Cómo estudiar con esta página</h2>
+  <ol class="route">
+    <li><b>Empieza por «Desde cero».</b> Solo asume que sabes derivar. No sigas hasta entender sustitución y partes.</li>
+    <li><b>Ten a mano las herramientas.</b> Son solo lo que el parcial te pide; vuelve a ellas cuando te trabes.</li>
+    <li><b>Estudia la guía por tipo.</b> Lee la receta y luego intenta cada concha de mango antes de abrir su solución.</li>
+    <li><b>Practica con el banco.</b> Empieza por la familia que te cueste más; no hace falta hacerlos todos.</li>
+    <li><b>Copia a mano el parcial resuelto.</b> Fíjate en la señal de cada ejercicio: reconocer la técnica es la mitad del trabajo.</li>
+    <li><b>Haz tu parcial nuevo.</b> Abre una pista solo después de intentarlo un rato.</li>
+    <li><b>Simula el examen con el modelo real 2.</b> Sin apuntes y con reloj, a unos 20 minutos por ejercicio.</li>
+  </ol>
+  <div class="sheet">
+    <p class="q-head"><strong>Lo que trae tu PDF</strong><span class="pts">6 ejercicios · 5 pts c/u · 30 %</span></p>
+    <p>Los dos modelos repiten esta estructura. Es la tabla más importante de la página.</p>
+    <div class="table-box"><table>
+      <thead><tr><th>Nº</th><th>Si ves esto</th><th>Usa esto</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Te dan un resultado y preguntan si es cierto</td><td>Derivar el resultado, y luego integrar</td></tr>
+        <tr><td>2</td><td>\(\ln x\) dentro de un seno o coseno</td><td>\(u=\ln x\), luego partes dos veces</td></tr>
+        <tr><td>3</td><td>\(\sqrt{a^2-x^2}\)</td><td>Sustitución trigonométrica \(x=a\sen\theta\)</td></tr>
+        <tr><td>4</td><td>Fracción de polinomios</td><td>Factorizar y fracciones parciales</td></tr>
+        <tr><td>5</td><td>Potencias de \(\sinh\), \(\cosh\), \(\coth\), \(\csch\)</td><td>Identidades hiperbólicas y sustitución</td></tr>
+        <tr><td>6</td><td>\(a+b\cos x\) o \(a+b\sen x\) abajo</td><td>Sustitución \(t=\tan(x/2)\)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Tu PDF no trae integrales definidas ni indica la duración. Como te dijeron que sí pueden entrar, las incluí en tu parcial nuevo. Confirma con tu profesor si este lapso las evalúa.</p>
+  </div>
+</section>
+
+<section id="cero">
+  <p class="eyebrow">Paso 1 · Solo necesitas saber derivar</p>
+  <h2>Integrales desde cero</h2>
+
+  <h3>La idea: integrar es derivar al revés</h3>
+  <p>Al derivar, tienes una función y buscas su derivada. Al integrar, tienes la derivada y buscas la función original. La pregunta siempre es: <b>¿qué función, al derivarla, me da esto?</b></p>
+  <p>Como la derivada de \(x^2\) es \(2x\), se escribe:</p>
+  \[ \int 2x\dx=x^2+C \]
+  <p>El símbolo \(\int\) significa «integral de». Lo de adentro, \(2x\), se llama integrando. El \(dx\) indica que la variable es \(x\). La respuesta se llama antiderivada o primitiva.</p>
+
+  <h3>Por qué siempre va +C</h3>
+  <p>\(x^2\), \(x^2+5\) y \(x^2-7\) tienen la misma derivada, \(2x\), porque la derivada de una constante es cero. No sabemos qué constante tenía la función original, así que la representamos con \(C\). Omitirla deja incompleta una integral indefinida.</p>
+
+  <h3>Tu red de seguridad: deriva el resultado</h3>
+  <p>Toda integral indefinida se puede comprobar. Deriva tu respuesta: si te da el integrando, está bien. Ya sabes derivar, así que hazlo en el examen si te alcanza el tiempo.</p>
+
+  <h3>La regla de la potencia</h3>
+  <p>Súmale 1 al exponente y divide entre el exponente nuevo. Comprobación: la derivada de \(\frac{x^3}{3}\) es \(x^2\).</p>
+  \[ \int x^n\dx=\frac{x^{n+1}}{n+1}+C\qquad(n\ne-1) \]
+  <p>Si hay raíces o fracciones, primero reescríbelas como potencia: \(\sqrt{x}=x^{1/2}\) y \(\dfrac{1}{x^3}=x^{-3}\).</p>
+  \[ \int\left(3x^2-\frac{4}{x^3}+\sqrt{x}\right)\dx=x^3+\frac{2}{x^2}+\frac23x^{3/2}+C \]
+  <p>El caso \(n=-1\) no sirve, porque dividiría entre cero. Por eso \(\int\frac{dx}{x}=\ln|x|+C\) tiene su propia fórmula.</p>
+
+  <h3>Lo permitido y lo prohibido</h3>
+  <div class="table-box"><table>
+    <thead><tr><th>Sí puedes</th><th>No puedes</th></tr></thead>
+    <tbody>
+      <tr><td>Separar sumas: \(\int(f+g)=\int f+\int g\)</td><td>Separar productos: \(\int fg\ne\int f\cdot\int g\)</td></tr>
+      <tr><td>Sacar constantes: \(\int 5f=5\int f\)</td><td>Separar fracciones por abajo: \(\int\frac{1}{f+g}\ne\int\frac1f+\int\frac1g\)</td></tr>
+      <tr><td>Simplificar antes de integrar</td><td>Decir que \(\int\frac{1}{f}=\ln|f|\) siempre: solo vale si arriba está la derivada de \(f\)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Sustitución: la regla de la cadena al revés</h3>
+  <p>Al derivar \(\sen(x^2)\), la regla de la cadena da \(\cos(x^2)\cdot 2x\). Por eso, cuando ves una función y además su derivada multiplicando, la integral se resuelve cambiando de variable.</p>
+  <ol class="recipe">
+    <li>Elige \(u\): normalmente lo que está «adentro» y cuya derivada aparece afuera.</li>
+    <li>Deriva: halla \(du\) en términos de \(dx\).</li>
+    <li>Reemplaza todo. No debe quedar ninguna \(x\).</li>
+    <li>Integra en \(u\).</li>
+    <li>Vuelve a \(x\).</li>
+  </ol>
+  <p>Con \(u=x^2\), \(du=2x\dx\):</p>
+  \[ \int\cos(x^2)\,2x\dx=\int\cos u\du=\sen u+C=\sen(x^2)+C \]
+  <p>Si falta una constante, se ajusta. Con \(u=3x\), \(du=3\dx\), o sea \(dx=\dfrac{du}{3}\):</p>
+  \[ \int\cos 3x\dx=\frac13\int\cos u\du=\frac13\sen 3x+C \]
+  <p>Lo que no se puede ajustar es una \(x\): en \(\int\cos(x^2)\dx\) no hay \(2x\) y esta sustitución no funciona.</p>
+
+  <h3>Por partes: la regla del producto al revés</h3>
+  <p>Partimos de la derivada de un producto, \((wv)'=w'v+wv'\). Al integrar y despejar sale la fórmula:</p>
+  \[ \int w\,dv=wv-\int v\,dw \]
+  <p>Partes una integral en dos trozos: \(w\), que vas a derivar, y \(dv\), que vas a integrar. Para elegir \(w\), toma lo primero que aparezca en esta lista: <b>L</b>ogaritmos, <b>I</b>nversas, <b>A</b>lgebraicas (potencias de \(x\)), <b>T</b>rigonométricas, <b>E</b>xponenciales.</p>
+  <p>Ejemplo: en \(\int xe^x\dx\) hay una algebraica y una exponencial, así que \(w=x\), \(dv=e^x\dx\). Entonces \(dw=dx\), \(v=e^x\):</p>
+  \[ \int xe^x\dx=xe^x-\int e^x\dx=xe^x-e^x+C \]
+
+  <h3>Integral definida: un número, no una función</h3>
+  <p>\(\int_a^b f(x)\dx\) mide el área con signo entre la curva y el eje \(x\), desde \(a\) hasta \(b\). El área bajo el eje cuenta negativa. Si \(f\) es continua en \([a,b]\) y \(F\) es una antiderivada, el Teorema Fundamental del Cálculo dice:</p>
+  \[ \int_a^b f(x)\dx=F(b)-F(a) \]
+  \[ \int_0^2x^2\dx=\left[\frac{x^3}{3}\right]_0^2=\frac83-0=\frac83 \]
+  <p>No lleva \(+C\), porque se cancelaría al restar. Si intercambias los límites, cambia el signo: \(\int_b^a f=-\int_a^b f\). Y si sustituyes, cambia también los límites.</p>
+
+  <h3>Qué probar primero en cualquier integral</h3>
+  <ol class="recipe">
+    <li>¿Se puede simplificar? Usa propiedades de logaritmos, identidades, división o separar en sumas.</li>
+    <li>¿Es una fórmula directa de la tabla?</li>
+    <li>¿Aparece una función y su derivada? Usa sustitución.</li>
+    <li>¿Es una fracción de polinomios? Usa fracciones parciales.</li>
+    <li>¿Hay \(\sqrt{a^2-x^2}\), \(\sqrt{a^2+x^2}\) o \(\sqrt{x^2-a^2}\)? Usa sustitución trigonométrica.</li>
+    <li>¿Es un producto de tipos distintos, o un logaritmo solo? Usa partes.</li>
+    <li>¿Hay \(a+b\cos x\) o \(a+b\sen x\) abajo? Usa \(t=\tan(x/2)\).</li>
+  </ol>
+  <div class="trap"><b>La concha de mango general</b><p>El orden importa: la mayoría de las trampas son integrales que parecen de una técnica difícil, pero salen con los primeros pasos de esta lista. Revisa siempre la sustitución simple antes de lanzarte con partes o fracciones.</p></div>
+</section>
+
+<section id="kit">
+  <p class="eyebrow">Paso 2</p>
+  <h2>Herramientas mínimas</h2>
+
+  <h3>Integrales que debes saberte</h3>
+  <div class="table-box"><table>
+    <tbody>
+      <tr><td>\(\displaystyle\int x^n\dx=\frac{x^{n+1}}{n+1}+C\quad(n\ne-1)\)</td><td>\(\displaystyle\int\frac{dx}{x}=\ln|x|+C\)</td></tr>
+      <tr><td>\(\displaystyle\int e^x\dx=e^x+C\)</td><td>\(\displaystyle\int\frac{dx}{a^2+x^2}=\frac1a\arctan\frac{x}{a}+C\)</td></tr>
+      <tr><td>\(\displaystyle\int\cos x\dx=\sen x+C\)</td><td>\(\displaystyle\int\sen x\dx=-\cos x+C\)</td></tr>
+      <tr><td>\(\displaystyle\int\csc^2x\dx=-\cot x+C\)</td><td>\(\displaystyle\int\sec^2x\dx=\tan x+C\)</td></tr>
+      <tr><td>\(\displaystyle\int\cosh x\dx=\sinh x+C\)</td><td>\(\displaystyle\int\sinh x\dx=\cosh x+C\)</td></tr>
+      <tr><td>\(\displaystyle\int\sech^2x\dx=\tanh x+C\)</td><td>\(\displaystyle\int\csch^2x\dx=-\coth x+C\)</td></tr>
+      <tr><td>\(\displaystyle\int\frac{dx}{\sqrt{a^2-x^2}}=\arcsen\frac{x}{a}+C\)</td><td>\(\displaystyle\int\frac{dx}{a^2-x^2}=\frac{1}{2a}\ln\left|\frac{a+x}{a-x}\right|+C\)</td></tr>
+      <tr><td>\(\displaystyle\int\frac{dx}{x^2-a^2}=\frac{1}{2a}\ln\left|\frac{x-a}{x+a}\right|+C\)</td><td>\(\displaystyle\int\tanh x\dx=\ln(\cosh x)+C\)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Sustitución: el truco que aparece en todas</h3>
+  <p>Busca una función cuya derivada también esté en la integral, llámala \(u\) y cambia todo a \(u\).</p>
+  \[ \int\frac{2x}{x^2+1}\dx\quad\xrightarrow{\;u=x^2+1,\;\;du=2x\dx\;}\quad\int\frac{du}{u}=\ln\left(x^2+1\right)+C \]
+
+  <h3>Por partes: para productos</h3>
+  \[ \int w\,dv=wv-\int v\,dw \]
+  <p>Ejemplo con \(w=x\), \(dv=\cos x\dx\), de donde \(dw=dx\), \(v=\sen x\):</p>
+  \[ \int x\cos x\dx=x\sen x-\int\sen x\dx=x\sen x+\cos x+C \]
+
+  <h3>Integrales definidas: lo mismo, con dos pasos más</h3>
+  <p>Hallas la antiderivada \(F\) y evalúas \(F(b)-F(a)\). Si haces sustitución, cambia también los límites; así no tienes que devolver la variable. No lleva \(+C\).</p>
+  \[ \int_0^1\frac{2x}{x^2+1}\dx\quad\xrightarrow{\;x=0\to u=1,\;\;x=1\to u=2\;}\quad\int_1^2\frac{du}{u}=\ln 2-\ln 1=\ln 2 \]
+
+  <h3>Identidades que usa el parcial</h3>
+  <div class="table-box"><table>
+    <thead><tr><th>Trigonométricas</th><th>Hiperbólicas</th></tr></thead>
+    <tbody>
+      <tr><td>\(\sen^2x+\cos^2x=1\)</td><td>\(\cosh^2x-\sinh^2x=1\)</td></tr>
+      <tr><td>\(\cos^2x=\dfrac{1+\cos 2x}{2}\)</td><td>\(\cosh^2x=\dfrac{\cosh 2x+1}{2}\)</td></tr>
+      <tr><td>\(\sen^2x=\dfrac{1-\cos 2x}{2}\)</td><td>\(\sinh^2x=\dfrac{\cosh 2x-1}{2}\)</td></tr>
+      <tr><td>\(\sen 2x=2\sen x\cos x\)</td><td>\(\sinh 2x=2\sinh x\cosh x\)</td></tr>
+      <tr><td>\(1+\cot^2x=\csc^2x\)</td><td>\(\coth^2x-1=\csch^2x\)</td></tr>
+    </tbody>
+  </table></div>
+  <p>También necesitas esta derivada: \(\dfrac{d}{dx}\coth x=-\csch^2x\).</p>
+</section>
+
+<section id="guia">
+  <p class="eyebrow">Paso 3</p>
+  <h2>Guía por tipo y conchas de mango</h2>
+  <p>Hay una receta para cada uno de los seis ejercicios de tu parcial y otra para las definidas. Después de cada receta vienen ejercicios parecidos con trampa. Intenta cada uno antes de abrir la solución.</p>
+  <p class="note">Ninguna lista puede traer todos los ejercicios posibles. Estas conchas cubren las familias de trampas más comunes; yo las elegí y no salen de exámenes reales, salvo la estructura de tu PDF. Si te sale otra, vuelve a la lista de «Qué probar primero».</p>
+
+  <div class="type-head">
+    <p class="type-tag">Tipo 1 · Ejercicio 1 del parcial</p>
+    <h3 style="margin-top:.25rem">¿Es verdadera esta integral?</h3>
+  </div>
+  <p>Te dan un resultado y debes decidir si es correcto. «Por definición de antiderivada» significa derivar el resultado. «Por técnicas» significa resolver la integral tú.</p>
+  <ol class="recipe">
+    <li>Simplifica el integrando, sobre todo los logaritmos: \(\ln(x^n)=n\ln x\).</li>
+    <li>Deriva el resultado que te dieron y compáralo con el integrando.</li>
+    <li>Resuelve la integral con la técnica adecuada, normalmente sustitución.</li>
+    <li>Concluye con una frase. Si es falsa, escribe el resultado correcto.</li>
+  </ol>
+  <div class="sheet">
+    <div class="item"><p class="item-id">Concha 1.1</p><p>¿Es verdadera?</p>
+      \[ \int\frac{\ln(x^2)}{x}\dx=\frac{(\ln x)^3}{3}+C \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> confundir \(\ln(x^2)\) con \((\ln x)^2\). No son lo mismo: \(\ln(x^2)=2\ln x\), mientras que \((\ln x)^2\) es el logaritmo multiplicado por sí mismo.</p>
+        <p>La derivada de lo propuesto es \(\dfrac{(\ln x)^2}{x}\), distinta del integrando \(\dfrac{2\ln x}{x}\). Con \(u=\ln x\):</p>
+        \[ 2\int u\du=u^2+C=(\ln x)^2+C \]
+        <p><b>Es falsa.</b></p>
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 1.2</p><p>¿Es verdadera?</p>
+      \[ \int\frac{(\ln x)^2}{x}\dx=\frac{(\ln x)^3}{3}+C \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> se ve casi igual a la anterior, pero aquí el cuadrado está afuera y no se baja como factor.</p>
+        <p>Derivando con la cadena: \(\dfrac{3(\ln x)^2}{3}\cdot\dfrac1x=\dfrac{(\ln x)^2}{x}\), que coincide. Con \(u=\ln x\):</p>
+        \[ \int u^2\du=\frac{u^3}{3}+C=\frac{(\ln x)^3}{3}+C \]
+        <p><b>Es verdadera.</b></p>
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 1.3</p><p>¿Es verdadera?</p>
+      \[ \int e^{3x}\dx=e^{3x}+C \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> olvidar la constante interna. La derivada de \(e^{3x}\) es \(3e^{3x}\), no \(e^{3x}\).</p>
+        <p>Con \(u=3x\), \(dx=\dfrac{du}{3}\), queda \(\dfrac13\int e^u\du\):</p>
+        \[ \int e^{3x}\dx=\frac{e^{3x}}{3}+C \]
+        <p><b>Es falsa.</b></p>
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 1.4</p><p>¿Es verdadera?</p>
+      \[ \int x\cos x\dx=\frac{x^2}{2}\sen x+C \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> integrar cada factor por separado. Eso está prohibido en un producto.</p>
+        <p>La derivada de lo propuesto es \(x\sen x+\dfrac{x^2}{2}\cos x\), que no coincide. Por partes, con \(w=x\), \(dv=\cos x\dx\):</p>
+        \[ \int x\cos x\dx=x\sen x-\int\sen x\dx=x\sen x+\cos x+C \]
+        <p><b>Es falsa.</b></p>
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 1.5</p><p>Una persona responde \(\sen^2x+C\) y otra responde \(-\cos^2x+C\). ¿Quién tiene razón?</p>
+      \[ \int 2\sen x\cos x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> creer que una respuesta distinta es automáticamente incorrecta.</p>
+        <p>Derivando: \((\sen^2x)'=2\sen x\cos x\) y \((-\cos^2x)'=2\cos x\sen x\). Ambas coinciden. Difieren en una constante:</p>
+        \[ \sen^2x-(-\cos^2x)=\sen^2x+\cos^2x=1 \]
+        <p><b>Las dos son correctas.</b> La constante \(C\) absorbe esa diferencia.</p>
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 1.6</p><p>¿Es verdadera?</p>
+      \[ \int\frac{dx}{2x+1}=\ln|2x+1|+C \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> poner logaritmo sin revisar la derivada de abajo. La derivada de lo propuesto es \(\dfrac{2}{2x+1}\), el doble del integrando.</p>
+        <p>Con \(u=2x+1\), \(dx=\dfrac{du}{2}\):</p>
+        \[ \int\frac{dx}{2x+1}=\frac12\ln|2x+1|+C \]
+        <p><b>Es falsa.</b></p>
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 1.7</p><p>¿Es verdadera?</p>
+      \[ \int\frac{dx}{x^2}=\ln(x^2)+C \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> usar logaritmo para toda fracción. El logaritmo solo aparece con \(\dfrac{1}{x}\) o \(\dfrac{f'}{f}\).</p>
+        <p>La derivada de lo propuesto es \(\dfrac{2}{x}\). Con la regla de la potencia, \(x^{-2}\) da:</p>
+        \[ \int x^{-2}\dx=\frac{x^{-1}}{-1}+C=-\frac1x+C \]
+        <p><b>Es falsa.</b></p>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="type-head">
+    <p class="type-tag">Tipo 2 · Ejercicio 2 del parcial</p>
+    <h3 style="margin-top:.25rem">\(\ln x\) dentro de seno o coseno</h3>
+  </div>
+  <p>Con \(u=\ln x\), la igualdad \(x=e^u\) cambia el \(dx\) por \(e^u\du\). Eso deja un producto de exponencial por seno o coseno. Esa integral se llama cíclica: tras aplicar partes dos veces, reaparece la original.</p>
+  <ol class="recipe">
+    <li><b>Primero mira si hay \(\frac1x\) multiplicando.</b> Si lo hay, basta \(u=\ln x\) y no necesitas partes.</li>
+    <li>Si no lo hay, usa \(u=\ln x\), \(x=e^u\), \(dx=e^u\du\). Reemplaza también cualquier \(x\) que esté afuera.</li>
+    <li>Si hay un cuadrado, bájalo con \(\cos^2u=\frac{1+\cos 2u}{2}\) o \(\sen^2u=\frac{1-\cos 2u}{2}\).</li>
+    <li>Aplica partes dos veces a la integral cíclica, siempre con \(dv\) en la exponencial.</li>
+    <li>Cuando reaparezca \(I\), detente, pásala al otro lado y despeja.</li>
+    <li>Vuelve a \(x\), con \(e^u=x\) y \(u=\ln x\).</li>
+  </ol>
+  <p>Estas fórmulas sirven para comprobar tu resultado, pero en el examen muestra las partes, porque piden justificar:</p>
+  \[ \int e^{au}\cos(bu)\du=\frac{e^{au}(a\cos bu+b\sen bu)}{a^2+b^2}+C \]
+  \[ \int e^{au}\sen(bu)\du=\frac{e^{au}(a\sen bu-b\cos bu)}{a^2+b^2}+C \]
+  <div class="sheet">
+    <div class="item"><p class="item-id">Concha 2.1</p>
+      \[ \int\sen(\ln x)\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> parece más fácil que la del parcial, pero también es cíclica. Sin \(\frac1x\) no hay integral directa.</p>
+        <p>Con \(u=\ln x\), queda \(I=\int e^u\sen u\du\). Partes dos veces:</p>
+        \[ I=e^u\sen u-\int e^u\cos u\du=e^u\sen u-e^u\cos u-I \]
+        <p>Al despejar \(2I\) y volver a \(x\):</p>
+        \[ \frac{x}{2}\left[\sen(\ln x)-\cos(\ln x)\right]+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 2.2</p>
+      \[ \int\frac{\cos(\ln x)}{x}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> lanzarse con partes. El \(\frac1x\) es la derivada de \(\ln x\), así que sale en una línea.</p>
+        <p>Con \(u=\ln x\), \(du=\dfrac{dx}{x}\):</p>
+        \[ \int\cos u\du=\sen(\ln x)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 2.3</p>
+      \[ \int x\cos(\ln x)\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> la \(x\) de afuera también cambia. Con \(x=e^u\) y \(dx=e^u\du\), el producto \(x\dx\) se vuelve \(e^{2u}\du\).</p>
+        \[ I=\int e^{2u}\cos u\du \]
+        <p>Por partes con \(dv=e^{2u}\du\), \(v=\frac12e^{2u}\), dos veces:</p>
+        \[ I=\frac12e^{2u}\cos u+\frac14e^{2u}\sen u-\frac14I \]
+        <p>Al despejar y usar \(e^{2u}=x^2\):</p>
+        \[ \frac{x^2}{5}\left[2\cos(\ln x)+\sen(\ln x)\right]+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 2.4</p>
+      \[ \int\frac{\sen^2(\ln x)}{x}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> es igual a la del modelo 2, pero con \(\frac1x\). No hay exponencial ni partes.</p>
+        <p>Con \(u=\ln x\):</p>
+        \[ \int\sen^2u\du=\int\frac{1-\cos 2u}{2}\du=\frac{u}{2}-\frac{\sen 2u}{4}+C \]
+        \[ \frac{\ln x}{2}-\frac{\sen(2\ln x)}{4}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 2.5</p>
+      \[ \int\sen(\ln x)\cos(\ln x)\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> tratar el producto directamente. Primero se junta con \(\sen u\cos u=\frac12\sen 2u\).</p>
+        \[ \frac12\int e^u\sen 2u\du \]
+        <p>Con partes dos veces, \(J=\int e^u\sen 2u\du\) cumple \(5J=e^u(\sen 2u-2\cos 2u)\):</p>
+        \[ \frac{x}{10}\left[\sen(2\ln x)-2\cos(2\ln x)\right]+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 2.6</p>
+      \[ \int\ln x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> parece que no hay producto, pero el factor oculto es 1. Se toma \(w=\ln x\) y \(dv=dx\), así que \(dw=\dfrac{dx}{x}\), \(v=x\):</p>
+        \[ x\ln x-\int x\cdot\frac{1}{x}\dx=x\ln x-x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 2.7</p>
+      \[ \int(\ln x)^2\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> convertirlo en \(2\ln x\). Eso solo vale para \(\ln(x^2)\).</p>
+        <p>Con \(w=(\ln x)^2\), \(dv=dx\), queda \(dw=\dfrac{2\ln x}{x}\dx\), \(v=x\):</p>
+        \[ x(\ln x)^2-2\int\ln x\dx=x(\ln x)^2-2x\ln x+2x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 2.8</p>
+      \[ \int\cos(\sqrt{x})\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> es el mismo truco con otra función: despejar \(x\). Con \(w=\sqrt{x}\), \(x=w^2\), \(dx=2w\dw\):</p>
+        \[ 2\int w\cos w\dw=2(w\sen w+\cos w)+C \]
+        \[ 2\sqrt{x}\sen\sqrt{x}+2\cos\sqrt{x}+C \]
+      </div></details>
+    </div>
+  </div>
+
+  <div class="type-head">
+    <p class="type-tag">Tipo 3 · Ejercicio 3 del parcial</p>
+    <h3 style="margin-top:.25rem">Sustitución trigonométrica</h3>
+  </div>
+  <p>Una raíz de suma o resta de cuadrados no se integra fácil. Una identidad trigonométrica convierte lo de adentro en un cuadrado perfecto y elimina la raíz.</p>
+  <div class="table-box"><table>
+    <thead><tr><th>Si ves</th><th>Cambia</th><th>\(dx\)</th><th>La raíz queda</th></tr></thead>
+    <tbody>
+      <tr><td>\(\sqrt{a^2-x^2}\)</td><td>\(x=a\sen\theta\)</td><td>\(a\cos\theta\dth\)</td><td>\(a\cos\theta\)</td></tr>
+      <tr><td>\(\sqrt{a^2+x^2}\)</td><td>\(x=a\tan\theta\)</td><td>\(a\sec^2\theta\dth\)</td><td>\(a\sec\theta\)</td></tr>
+      <tr><td>\(\sqrt{x^2-a^2}\)</td><td>\(x=a\sec\theta\)</td><td>\(a\sec\theta\tan\theta\dth\)</td><td>\(a\tan\theta\)</td></tr>
+    </tbody>
+  </table></div>
+  <ol class="recipe">
+    <li>Antes de sustituir, revisa si hay una \(x\) suelta arriba que permita sustitución simple.</li>
+    <li>Identifica \(a\) y elige el cambio de la tabla.</li>
+    <li>Reemplaza \(x\), \(dx\) y la raíz, y simplifica hasta tener solo \(\theta\).</li>
+    <li>Integra en \(\theta\).</li>
+    <li>Dibuja el triángulo con el cambio que hiciste y vuelve a \(x\). En una definida, cambia los límites a \(\theta\) y evita este paso.</li>
+  </ol>
+  <div class="sheet">
+    <div class="item"><p class="item-id">Concha 3.1</p>
+      \[ \int\sqrt{9-x^2}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> el \(\sen 2\theta\) no se puede volver a \(x\) directamente. Hay que abrirlo primero.</p>
+        <p>Con \(x=3\sen\theta\):</p>
+        \[ 9\int\cos^2\theta\dth=\frac92\theta+\frac94\sen 2\theta+C=\frac92\theta+\frac92\sen\theta\cos\theta+C \]
+        <p>Como \(\sen\theta=\frac{x}{3}\) y \(\cos\theta=\frac{\sqrt{9-x^2}}{3}\):</p>
+        \[ \frac92\arcsen\frac{x}{3}+\frac{x}{2}\sqrt{9-x^2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 3.2</p>
+      \[ \int\frac{x}{\sqrt{9-x^2}}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> tiene la raíz, pero no necesita sustitución trigonométrica. La \(x\) de arriba es casi la derivada de lo de adentro.</p>
+        <p>Con \(u=9-x^2\), \(x\dx=-\dfrac{du}{2}\):</p>
+        \[ -\frac12\int u^{-1/2}\du=-\sqrt{9-x^2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 3.3</p>
+      \[ \int\frac{dx}{\sqrt{9-x^2}} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> es una fórmula directa. No hace falta triángulo.</p>
+        \[ \arcsen\frac{x}{3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 3.4</p>
+      \[ \int\frac{dx}{x^2\sqrt{4-9x^2}} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> el 9 está pegado a \(x^2\). El cuadrado es \((3x)^2\), así que el cambio es \(3x=2\sen\theta\), no \(x=2\sen\theta\).</p>
+        <p>Entonces \(x=\frac23\sen\theta\), \(dx=\frac23\cos\theta\dth\) y la raíz es \(2\cos\theta\):</p>
+        \[ \int\frac{\frac23\cos\theta\dth}{\frac49\sen^2\theta\cdot 2\cos\theta}=\frac34\int\csc^2\theta\dth=-\frac34\cot\theta+C \]
+        <p>Del triángulo, con \(\sen\theta=\frac{3x}{2}\), sale \(\cot\theta=\frac{\sqrt{4-9x^2}}{3x}\):</p>
+        \[ -\frac{\sqrt{4-9x^2}}{4x}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 3.5</p>
+      \[ \int\frac{dx}{x^2\sqrt{x^2+4}} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> un cambio de signo en la raíz cambia toda la sustitución. Aquí va tangente.</p>
+        <p>Con \(x=2\tan\theta\):</p>
+        \[ \int\frac{2\sec^2\theta\dth}{4\tan^2\theta\cdot 2\sec\theta}=\frac14\int\frac{\cos\theta}{\sen^2\theta}\dth=-\frac{1}{4\sen\theta}+C \]
+        <p>Del triángulo, \(\sen\theta=\frac{x}{\sqrt{x^2+4}}\):</p>
+        \[ -\frac{\sqrt{x^2+4}}{4x}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 3.6</p>
+      \[ \int\frac{dx}{x^2\sqrt{x^2-9}}\qquad(x>3) \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> con el orden \(x^2-a^2\) se usa secante.</p>
+        <p>Con \(x=3\sec\theta\), \(dx=3\sec\theta\tan\theta\dth\) y la raíz es \(3\tan\theta\):</p>
+        \[ \int\frac{3\sec\theta\tan\theta\dth}{9\sec^2\theta\cdot 3\tan\theta}=\frac19\int\cos\theta\dth=\frac19\sen\theta+C \]
+        <p>Del triángulo, hipotenusa \(x\) y adyacente 3, así que \(\sen\theta=\frac{\sqrt{x^2-9}}{x}\):</p>
+        \[ \frac{\sqrt{x^2-9}}{9x}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 3.7</p>
+      \[ \int\frac{dx}{\sqrt{8+2x-x^2}} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> la forma \(a^2-x^2\) está escondida. Hay que completar el cuadrado.</p>
+        \[ 8+2x-x^2=9-(x^2-2x+1)=9-(x-1)^2 \]
+        <p>Con \(u=x-1\), es la fórmula directa de arcoseno:</p>
+        \[ \arcsen\frac{x-1}{3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 3.8</p>
+      \[ \int\frac{x^2}{\sqrt{1-x^2}}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> ahora la potencia está arriba y es \(x^2\), así que la sustitución simple no sirve.</p>
+        <p>Con \(x=\sen\theta\), la raíz se cancela con \(dx\):</p>
+        \[ \int\sen^2\theta\dth=\frac{\theta}{2}-\frac{\sen\theta\cos\theta}{2}+C \]
+        \[ \frac12\arcsen x-\frac12x\sqrt{1-x^2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 3.9</p>
+      \[ \int\frac{dx}{(4-x^2)^{3/2}} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> no se ve la raíz, pero el exponente \(\frac32\) la esconde: es \(\left(\sqrt{4-x^2}\right)^3\).</p>
+        <p>Con \(x=2\sen\theta\), el denominador es \(8\cos^3\theta\):</p>
+        \[ \int\frac{2\cos\theta\dth}{8\cos^3\theta}=\frac14\int\sec^2\theta\dth=\frac14\tan\theta+C \]
+        \[ \frac{x}{4\sqrt{4-x^2}}+C \]
+      </div></details>
+    </div>
+  </div>
+
+  <div class="type-head">
+    <p class="type-tag">Tipo 4 · Ejercicio 4 del parcial</p>
+    <h3 style="margin-top:.25rem">Fracciones parciales</h3>
+  </div>
+  <p>Es sumar fracciones al revés. Como \(\frac{1}{x-1}-\frac{1}{x+2}=\frac{3}{(x-1)(x+2)}\), una fracción complicada se puede partir en otras simples que sí sabes integrar.</p>
+  <div class="table-box"><table>
+    <thead><tr><th>Factor abajo</th><th>Término que le toca</th><th>Se integra como</th></tr></thead>
+    <tbody>
+      <tr><td>\(x-a\)</td><td>\(\dfrac{A}{x-a}\)</td><td>Logaritmo</td></tr>
+      <tr><td>\((x-a)^2\)</td><td>\(\dfrac{A}{x-a}+\dfrac{B}{(x-a)^2}\)</td><td>Logaritmo y potencia</td></tr>
+      <tr><td>Cuadrático sin raíces</td><td>\(\dfrac{Bx+D}{x^2+bx+c}\)</td><td>Logaritmo y arcotangente</td></tr>
+    </tbody>
+  </table></div>
+  <ol class="recipe">
+    <li><b>Mira los grados.</b> Si el de arriba es igual o mayor que el de abajo, divide primero.</li>
+    <li><b>Mira si arriba está la derivada de abajo.</b> Si es así, sale \(\ln|\text{denominador}|\) sin más.</li>
+    <li>Factoriza abajo. Recuerda \(a^2-b^2\), \(a^3-b^3=(a-b)(a^2+ab+b^2)\) y \(a^3+b^3=(a+b)(a^2-ab+b^2)\). Saca factor común si puedes.</li>
+    <li>Plantea la suma según la tabla, quita denominadores y halla las constantes: da valores a \(x\) y compara coeficientes.</li>
+    <li>Integra cada parte. En un cuadrático, escribe el numerador como múltiplo de su derivada más una constante, y completa el cuadrado.</li>
+  </ol>
+  <p>Para saber si un cuadrático tiene raíces, calcula \(b^2-4ac\). Si es negativo, no se factoriza.</p>
+  <div class="sheet">
+    <div class="item"><p class="item-id">Concha 4.1</p>
+      \[ \int\frac{x^2+1}{x^2-1}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> los grados son iguales. Si no divides, el planteamiento sale mal.</p>
+        \[ \frac{x^2+1}{x^2-1}=1+\frac{2}{(x-1)(x+1)}=1+\frac{1}{x-1}-\frac{1}{x+1} \]
+        \[ x+\ln\left|\frac{x-1}{x+1}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 4.2</p>
+      \[ \int\frac{x+3}{(x-1)^2}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> un factor repetido lleva dos términos, y el segundo no da logaritmo.</p>
+        <p>De \(x+3=A(x-1)+B\), sale \(A=1\) y \(B=4\):</p>
+        \[ \int\frac{dx}{x-1}+4\int(x-1)^{-2}\dx=\ln|x-1|-\frac{4}{x-1}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 4.3</p>
+      \[ \int\frac{3x^2}{x^3-8}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> tiene el mismo denominador del parcial, pero aquí no hacen falta fracciones. \(3x^2\) es la derivada de \(x^3-8\).</p>
+        \[ \ln\left|x^3-8\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 4.4</p>
+      \[ \int\frac{dx}{x^4-1} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> \(x^4-1\) se factoriza como diferencia de cuadrados, \((x^2-1)(x^2+1)\). Sin una \(x\) arriba, la sustitución \(u=x^2\) no sirve.</p>
+        \[ \frac{1}{x^4-1}=\frac12\left(\frac{1}{x^2-1}-\frac{1}{x^2+1}\right) \]
+        \[ \frac14\ln\left|\frac{x-1}{x+1}\right|-\frac12\arctan x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 4.5</p>
+      \[ \int\frac{e^x}{e^{2x}-1}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> no parece una fracción de polinomios, pero lo es tras sustituir. Con \(u=e^x\), \(du=e^x\dx\), y \(e^{2x}=u^2\):</p>
+        \[ \int\frac{du}{u^2-1}=\frac12\ln\left|\frac{u-1}{u+1}\right|+C=\frac12\ln\left|\frac{e^x-1}{e^x+1}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 4.6</p>
+      \[ \int\frac{dx}{x^3-1} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> en el parcial, el numerador del cuadrático daba justo su derivada. Aquí no, y hay que acomodarlo.</p>
+        <p>Con \(x^3-1=(x-1)(x^2+x+1)\), sale:</p>
+        \[ \frac{1}{x^3-1}=\frac13\cdot\frac{1}{x-1}-\frac13\cdot\frac{x+2}{x^2+x+1} \]
+        <p>Se escribe \(x+2=\frac12(2x+1)+\frac32\), y se completa \(x^2+x+1=\left(x+\frac12\right)^2+\frac34\):</p>
+        \[ \frac13\ln|x-1|-\frac16\ln\left(x^2+x+1\right)-\frac{1}{\sqrt3}\arctan\frac{2x+1}{\sqrt3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 4.7</p>
+      \[ \int\frac{dx}{x^3+x} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> falta sacar factor común, \(x(x^2+1)\).</p>
+        <p>De \(1=A(x^2+1)+(Bx+D)x\), sale \(A=1\), \(B=-1\), \(D=0\):</p>
+        \[ \int\frac{dx}{x}-\int\frac{x}{x^2+1}\dx=\ln|x|-\frac12\ln\left(x^2+1\right)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 4.8</p>
+      \[ \int\frac{dx}{x^2+2x+5} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> intentar factorizar. El discriminante es \(4-20=-16\), así que no se puede. Se completa el cuadrado:</p>
+        \[ x^2+2x+5=(x+1)^2+4 \]
+        \[ \frac12\arctan\frac{x+1}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 4.9</p>
+      \[ \int\frac{x}{x^2+2x+5}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> casi está la derivada de abajo, pero falta acomodarla. La derivada es \(2x+2\), así que \(x=\frac12(2x+2)-1\):</p>
+        \[ \frac12\int\frac{2x+2}{x^2+2x+5}\dx-\int\frac{dx}{(x+1)^2+4} \]
+        \[ \frac12\ln\left(x^2+2x+5\right)-\frac12\arctan\frac{x+1}{2}+C \]
+      </div></details>
+    </div>
+  </div>
+
+  <div class="type-head">
+    <p class="type-tag">Tipo 5 · Ejercicio 5 del parcial</p>
+    <h3 style="margin-top:.25rem">Funciones hiperbólicas</h3>
+  </div>
+  <p>Son combinaciones de exponenciales y se comportan casi como las trigonométricas, con cambios de signo:</p>
+  \[ \sinh x=\frac{e^x-e^{-x}}{2},\qquad\cosh x=\frac{e^x+e^{-x}}{2} \]
+  <div class="table-box"><table>
+    <thead><tr><th>Función</th><th>Derivada</th><th>Comparada con trigonometría</th></tr></thead>
+    <tbody>
+      <tr><td>\(\sinh x\)</td><td>\(\cosh x\)</td><td>Igual</td></tr>
+      <tr><td>\(\cosh x\)</td><td>\(\sinh x\)</td><td>Sin el signo menos</td></tr>
+      <tr><td>\(\tanh x\)</td><td>\(\sech^2x\)</td><td>Igual</td></tr>
+      <tr><td>\(\coth x\)</td><td>\(-\csch^2x\)</td><td>Igual</td></tr>
+    </tbody>
+  </table></div>
+  <ol class="recipe">
+    <li><b>Potencia impar de \(\sinh\) o \(\cosh\):</b> separa un factor, cambia el resto con \(\cosh^2x-\sinh^2x=1\) y sustituye la otra función.</li>
+    <li><b>Solo potencias pares:</b> baja con ángulo doble, \(\sinh^2x=\frac{\cosh 2x-1}{2}\), \(\cosh^2x=\frac{\cosh 2x+1}{2}\).</li>
+    <li><b>Con \(\tanh\) y \(\sech\):</b> usa \(\tanh^2x=1-\sech^2x\) y \(w=\tanh x\), \(dw=\sech^2x\dx\).</li>
+    <li><b>Con \(\coth\) y \(\csch\):</b> usa \(\coth^2x=1+\csch^2x\) y \(w=\coth x\), \(dw=-\csch^2x\dx\).</li>
+    <li><b>Si aparece junto a \(e^x\):</b> cambia a la definición exponencial.</li>
+  </ol>
+  <div class="sheet">
+    <div class="item"><p class="item-id">Concha 5.1</p>
+      \[ \int\sinh^2x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> el signo. Se parece a \(\sen^2x\), pero el orden de la resta se invierte.</p>
+        \[ \int\frac{\cosh 2x-1}{2}\dx=\frac{\sinh 2x}{4}-\frac{x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 5.2</p>
+      \[ \int\cosh^3x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> en hiperbólicas, \(\cosh^2x=1+\sinh^2x\), con suma, no con resta.</p>
+        <p>Con \(w=\sinh x\):</p>
+        \[ \int(1+\sinh^2x)\cosh x\dx=\int(1+w^2)\dw=\sinh x+\frac{\sinh^3x}{3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 5.3</p>
+      \[ \int\cosh^4x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> hay que bajar la potencia dos veces.</p>
+        \[ \cosh^4x=\left(\frac{1+\cosh 2x}{2}\right)^2=\frac38+\frac12\cosh 2x+\frac18\cosh 4x \]
+        \[ \frac{3x}{8}+\frac{\sinh 2x}{4}+\frac{\sinh 4x}{32}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 5.4</p>
+      \[ \int\tanh^2x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> en trigonometría, \(\tan^2x=\sec^2x-1\). Aquí es al revés: \(\tanh^2x=1-\sech^2x\).</p>
+        \[ \int(1-\sech^2x)\dx=x-\tanh x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 5.5</p>
+      \[ \int\coth^2x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> dos signos seguidos. \(\coth^2x=1+\csch^2x\) y además \(\int\csch^2x\dx=-\coth x\).</p>
+        \[ \int(1+\csch^2x)\dx=x-\coth x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 5.6</p>
+      \[ \int\sech^4x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> se separa un \(\sech^2x\), que es la derivada de \(\tanh x\). Con \(w=\tanh x\):</p>
+        \[ \int(1-\tanh^2x)\sech^2x\dx=\int(1-w^2)\dw=\tanh x-\frac{\tanh^3x}{3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 5.7</p>
+      \[ \int\csch^4x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> el signo menos de \(dw\). Con \(w=\coth x\), \(\csch^2x\dx=-dw\):</p>
+        \[ \int(\coth^2x-1)\csch^2x\dx=-\int(w^2-1)\dw=\coth x-\frac{\coth^3x}{3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 5.8</p>
+      \[ \int\tanh^3x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> no se puede sustituir de una vez, porque falta el \(\sech^2x\). Se crea con la identidad:</p>
+        \[ \int\tanh x(1-\sech^2x)\dx=\int\tanh x\dx-\int\tanh x\sech^2x\dx \]
+        \[ \ln(\cosh x)-\frac{\tanh^2x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 5.9</p>
+      \[ \int e^x\sinh x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> parece de partes, pero con la definición sale directo.</p>
+        \[ \int e^x\cdot\frac{e^x-e^{-x}}{2}\dx=\frac12\int\left(e^{2x}-1\right)\dx=\frac{e^{2x}}{4}-\frac{x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 5.10</p>
+      \[ \int\sinh^2x\,\cosh^3x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> se parece al ejercicio del parcial, pero una potencia es impar. No hace falta ángulo doble. Con \(w=\sinh x\):</p>
+        \[ \int\sinh^2x(1+\sinh^2x)\cosh x\dx=\int\left(w^2+w^4\right)\dw \]
+        \[ \frac{\sinh^3x}{3}+\frac{\sinh^5x}{5}+C \]
+      </div></details>
+    </div>
+  </div>
+
+  <div class="type-head">
+    <p class="type-tag">Tipo 6 · Ejercicio 6 del parcial</p>
+    <h3 style="margin-top:.25rem">Sustitución \(t=\tan(x/2)\)</h3>
+  </div>
+  <p>Convierte cualquier fracción de senos y cosenos en una fracción de polinomios. De \(t=\tan\frac{x}{2}\) sale \(x=2\arctan t\), y al derivar se obtiene \(dx\). Las fórmulas de seno y coseno salen de las identidades de ángulo doble.</p>
+  \[ \sen x=\frac{2t}{1+t^2},\qquad\cos x=\frac{1-t^2}{1+t^2},\qquad dx=\frac{2\dt}{1+t^2} \]
+  <ol class="recipe">
+    <li>Antes de usarla, mira si arriba está la derivada de abajo. Si es así, basta sustitución simple.</li>
+    <li>Mira el ángulo. Si es \(2x\), primero cambia \(w=2x\).</li>
+    <li>Reemplaza las fórmulas y multiplica arriba y abajo por \(1+t^2\).</li>
+    <li>Según lo que quede abajo, integra como en la tabla.</li>
+    <li>Vuelve a \(x\) con \(t=\tan(x/2)\).</li>
+  </ol>
+  <div class="table-box"><table>
+    <thead><tr><th>Abajo queda</th><th>El resultado es</th></tr></thead>
+    <tbody>
+      <tr><td>Una constante</td><td>Lineal en \(t\)</td></tr>
+      <tr><td>Suma de cuadrados, \(t^2+a^2\)</td><td>Arcotangente</td></tr>
+      <tr><td>Resta de cuadrados, \(a^2-t^2\)</td><td>Logaritmo</td></tr>
+      <tr><td>Cuadrado perfecto, \((t+a)^2\)</td><td>Potencia</td></tr>
+      <tr><td>Tiene término en \(t\)</td><td>Completa el cuadrado y usa una de las anteriores</td></tr>
+    </tbody>
+  </table></div>
+  <div class="sheet">
+    <div class="item"><p class="item-id">Concha 6.1</p>
+      \[ \int\frac{dx}{1+\cos x} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> el denominador se simplifica a una constante, así que no queda arcotangente. El denominador es \(\frac{(1+t^2)+(1-t^2)}{1+t^2}=\frac{2}{1+t^2}\):</p>
+        \[ \int\frac{1+t^2}{2}\cdot\frac{2\dt}{1+t^2}=\int dt=\tan\frac{x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 6.2</p>
+      \[ \int\frac{dx}{3+5\cos x} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> aquí el coeficiente del coseno es mayor que el número. Queda resta de cuadrados, así que sale logaritmo, no arcotangente.</p>
+        <p>Abajo queda \(3(1+t^2)+5(1-t^2)=8-2t^2\):</p>
+        \[ \int\frac{2\dt}{8-2t^2}=\int\frac{dt}{4-t^2}=\frac14\ln\left|\frac{2+t}{2-t}\right|+C \]
+        \[ \frac14\ln\left|\frac{2+\tan(x/2)}{2-\tan(x/2)}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 6.3</p>
+      \[ \int\frac{dx}{2+\sen x} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> el seno deja un término en \(t\). Hay que completar el cuadrado.</p>
+        <p>Abajo queda \(2+2t^2+2t\):</p>
+        \[ \int\frac{2\dt}{2t^2+2t+2}=\int\frac{dt}{\left(t+\frac12\right)^2+\frac34} \]
+        \[ \frac{2}{\sqrt3}\arctan\frac{2\tan(x/2)+1}{\sqrt3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 6.4</p>
+      \[ \int\frac{dx}{\sen x+\cos x} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> no hay número suelto, pero la técnica sirve igual. Queda una resta de cuadrados con raíz.</p>
+        <p>Abajo queda \(2t+1-t^2=2-(t-1)^2\). Con \(v=t-1\):</p>
+        \[ \int\frac{2\,dv}{2-v^2}=\frac{1}{\sqrt2}\ln\left|\frac{\sqrt2+v}{\sqrt2-v}\right|+C \]
+        \[ \frac{1}{\sqrt2}\ln\left|\frac{\sqrt2+\tan(x/2)-1}{\sqrt2-\tan(x/2)+1}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 6.5</p>
+      \[ \int\frac{\cos x}{5+3\sen x}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> parece del tipo \(t=\tan(x/2)\), pero arriba está casi la derivada de abajo. Con \(u=5+3\sen x\), \(du=3\cos x\dx\):</p>
+        \[ \frac13\int\frac{du}{u}=\frac13\ln(5+3\sen x)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 6.6</p>
+      \[ \int\frac{dx}{1+\sen x} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> abajo se forma un cuadrado perfecto, \(1+t^2+2t=(1+t)^2\). No es logaritmo ni arcotangente.</p>
+        \[ \int\frac{2\dt}{(1+t)^2}=-\frac{2}{1+t}+C=-\frac{2}{1+\tan(x/2)}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 6.7</p>
+      \[ \int\frac{dx}{5+3\cos 2x} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> el ángulo es \(2x\). Primero se cambia \(w=2x\), \(dx=\frac{dw}{2}\), y sale un \(\frac12\) extra. Después es el ejercicio 6 del parcial:</p>
+        \[ \frac12\int\frac{dw}{5+3\cos w}=\frac12\cdot\frac12\arctan\frac{\tan(w/2)}{2}+C \]
+        \[ \frac14\arctan\frac{\tan x}{2}+C \]
+      </div></details>
+    </div>
+  </div>
+
+  <div class="type-head">
+    <p class="type-tag">Tipo 7 · No sale en tu PDF, pero podría entrar</p>
+    <h3 style="margin-top:.25rem">Integrales definidas</h3>
+  </div>
+  <ol class="recipe">
+    <li><b>Mira el integrando en todo el intervalo.</b> Si se hace infinito o la antiderivada se rompe adentro, no puedes evaluar directo.</li>
+    <li>Mira si hay valor absoluto o simetría, porque pueden ahorrarte todo el cálculo.</li>
+    <li>Halla la antiderivada con la técnica que corresponda.</li>
+    <li>Si sustituyes, cambia los límites y no vuelvas a \(x\).</li>
+    <li>Evalúa \(F(b)-F(a)\), con todo el paréntesis, sin \(+C\).</li>
+    <li>Revisa el signo: si el integrando es positivo en todo el intervalo, el resultado debe ser positivo.</li>
+  </ol>
+  <div class="sheet">
+    <div class="item"><p class="item-id">Concha 7.1</p>
+      \[ \int_0^1x\sqrt{1+x^2}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> sustituir y dejar los límites viejos. Con \(u=1+x^2\), los límites pasan de 0 y 1 a 1 y 2:</p>
+        \[ \frac12\int_1^2u^{1/2}\du=\frac13\left[u^{3/2}\right]_1^2=\frac{2\sqrt2-1}{3} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 7.2</p>
+      \[ \int_{-1}^{1}\frac{dx}{x^2} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> evaluar a ciegas da \(\left[-\frac1x\right]_{-1}^{1}=-2\), un número negativo para una función siempre positiva. Es incorrecto.</p>
+        <p>La función se hace infinita en \(x=0\), que está dentro del intervalo, así que el Teorema Fundamental no aplica. Es una integral impropia y <b>diverge</b>: el área crece sin límite. Si tu curso aún no ve impropias, basta reconocer que no se puede evaluar directo.</p>
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 7.3</p>
+      \[ \int_0^3|x-1|\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> un valor absoluto no se integra directo. Se parte donde cambia de signo, en \(x=1\):</p>
+        \[ \int_0^1(1-x)\dx+\int_1^3(x-1)\dx=\frac12+2=\frac52 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 7.4</p>
+      \[ \int_{-\pi/4}^{\pi/4}x^3\cos x\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> gastar tiempo con partes. Los límites son simétricos y la función es impar, porque \(f(-x)=-f(x)\). Las áreas se cancelan:</p>
+        \[ \int_{-a}^{a}f(x)\dx=0 \]
+        <p>El resultado es <b>0</b>. Si la función fuera par, sería \(2\int_0^a f(x)\dx\).</p>
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 7.5</p>
+      \[ \text{a) }\int_0^{\pi}\frac{dx}{5+3\cos x}\qquad\text{b) }\int_0^{2\pi}\frac{dx}{5+3\cos x} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> \(\tan(x/2)\) se rompe en \(x=\pi\). Evaluar directo la parte b) da 0 para una función siempre positiva, y eso es imposible.</p>
+        <p>a) El límite superior en \(t\) es \(+\infty\), por eso se usa un límite:</p>
+        \[ \left[\frac12\arctan\frac{t}{2}\right]_0^{\infty}=\frac12\cdot\frac{\pi}{2}=\frac{\pi}{4} \]
+        <p>b) Se parte en \(x=\pi\). Por simetría del coseno, las dos mitades valen igual:</p>
+        \[ 2\cdot\frac{\pi}{4}=\frac{\pi}{2} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 7.6</p>
+      \[ \int_e^{e^2}\frac{dx}{x\ln x} \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> los límites se ven feos, pero la sustitución los limpia. Con \(u=\ln x\), pasan a ser 1 y 2:</p>
+        \[ \int_1^2\frac{du}{u}=\ln 2 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 7.7</p>
+      \[ \int_0^2\sqrt{4-x^2}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> es un cuarto de círculo de radio 2. Con eso ya tienes el valor para comprobar.</p>
+        <p>Con \(x=2\sen\theta\), los límites pasan a 0 y \(\frac{\pi}{2}\):</p>
+        \[ 4\int_0^{\pi/2}\cos^2\theta\dth=4\left[\frac{\theta}{2}+\frac{\sen 2\theta}{4}\right]_0^{\pi/2}=\pi \]
+        <p>Coincide con el área: \(\frac14\pi(2)^2=\pi\).</p>
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 7.8</p>
+      \[ \int_0^{2\pi}\sqrt{1-\cos^2x}\dx \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> \(\sqrt{\sen^2x}\) no es \(\sen x\): es \(|\sen x|\). Con \(\sen x\), el resultado sería 0, y eso es falso.</p>
+        <p>Como \(|\sen x|\) repite la misma forma en cada mitad:</p>
+        \[ 2\int_0^{\pi}\sen x\dx=2\left[-\cos x\right]_0^{\pi}=4 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">Concha 7.9</p>
+      <p>Halle \(G'(x)\), para \(x>0\):</p>
+      \[ G(x)=\int_1^{x^2}\ln t\dt \]
+      <details><summary>Ver la concha y la solución</summary><div class="sol">
+        <p><b>La concha:</b> olvidar la regla de la cadena. No hace falta integrar: el Teorema Fundamental dice que se reemplaza \(t\) por el límite superior y se multiplica por su derivada.</p>
+        \[ G'(x)=\ln(x^2)\cdot 2x=4x\ln x \]
+      </div></details>
+    </div>
+  </div>
+
+  <h3>Antes de entregar cada ejercicio</h3>
+  <ol class="recipe">
+    <li>¿Quedó el resultado en la variable original?</li>
+    <li>¿Pusiste \(+C\) en las indefinidas y lo omitiste en las definidas?</li>
+    <li>¿Cambiaste los límites al sustituir en una definida?</li>
+    <li>¿Puedes derivar tu resultado para comprobarlo?</li>
+    <li>¿Escribiste qué sustitución hiciste? El examen exige justificar cada respuesta.</li>
+  </ol>
+</section>
+
+<section id="banco">
+  <p class="eyebrow">Paso 4 · 136 ejercicios</p>
+  <h2>Banco de ejercicios</h2>
+  <p>Aquí están las variantes más probables de cada técnica, además de las conchas de la guía. Cada ejercicio trae la clave para resolverlo y el resultado. Si la clave no te alcanza, vuelve a la receta de ese tipo.</p>
+  <p class="note">Los ejercicios posibles son infinitos, así que ninguna lista garantiza que el tuyo salga idéntico. Si dominas la señal de cada familia, podrás atacar también las variantes que no estén aquí. Los ejercicios los elegí yo; no salen de exámenes reales.</p>
+  <div class="type-head"><h3 style="margin-top:0">Sustitución simple</h3></div>
+  <p>Puede aparecer sola o dentro de cualquier otro ejercicio. Busca una función cuya derivada también esté.</p>
+  <div class="sheet">
+    <div class="item"><p class="item-id">A1</p>
+      \[ \int(2x+3)^5\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=2x+3\), \(dx=\frac{du}{2}\), queda \(\frac12\int u^5\du\).</p>
+        \[ \frac{(2x+3)^6}{12}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A2</p>
+      \[ \int x^2(x^3+1)^4\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=x^3+1\), \(x^2\dx=\frac{du}{3}\).</p>
+        \[ \frac{(x^3+1)^5}{15}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A3</p>
+      \[ \int\sen x\cos^3x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=\cos x\), \(\sen x\dx=-du\).</p>
+        \[ -\frac{\cos^4x}{4}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A4</p>
+      \[ \int\tan x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Escribe \(\tan x=\frac{\sen x}{\cos x}\) y usa \(u=\cos x\).</p>
+        \[ -\ln|\cos x|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A5</p>
+      \[ \int\frac{e^{\sqrt{x}}}{\sqrt{x}}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=\sqrt{x}\), \(\frac{dx}{\sqrt{x}}=2\du\).</p>
+        \[ 2e^{\sqrt{x}}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A6</p>
+      \[ \int\frac{\sec^2x}{1+\tan x}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Arriba está la derivada de abajo, así que sale logaritmo.</p>
+        \[ \ln|1+\tan x|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A7</p>
+      \[ \int\frac{\arctan x}{1+x^2}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=\arctan x\), \(du=\frac{dx}{1+x^2}\).</p>
+        \[ \frac{(\arctan x)^2}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A8</p>
+      \[ \int\frac{e^x}{1+e^{2x}}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=e^x\), queda \(\int\frac{du}{1+u^2}\).</p>
+        \[ \arctan(e^x)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A9</p>
+      \[ \int\frac{x}{x^4+1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=x^2\), \(x\dx=\frac{du}{2}\), queda \(\frac12\int\frac{du}{u^2+1}\).</p>
+        \[ \frac12\arctan(x^2)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A10</p>
+      \[ \int\frac{dx}{x\left(1+\ln^2x\right)} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=\ln x\), queda \(\int\frac{du}{1+u^2}\).</p>
+        \[ \arctan(\ln x)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">A11</p>
+      \[ \int\frac{\sen 2x}{1+\cos^2x}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Como \(\sen 2x=2\sen x\cos x\), arriba está menos la derivada de abajo.</p>
+        \[ -\ln\left(1+\cos^2x\right)+C \]
+      </div></details>
+    </div>
+  </div>
+  <div class="type-head"><h3 style="margin-top:0">Ejercicio 1: ¿es verdadera?</h3></div>
+  <p>Simplifica, deriva lo que te dan y luego integra.</p>
+  <div class="sheet">
+    <div class="item"><p class="item-id">B1</p>
+      \[ \int\frac{2\ln(x^4)}{x}\dx=4(\ln x)^2+C \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p><b>Es verdadera.</b> El integrando es \(\frac{8\ln x}{x}\) y \(\left(4\ln^2x\right)'=\frac{8\ln x}{x}\).</p>
+        \[ 4(\ln x)^2+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">B2</p>
+      \[ \int\frac{\ln\sqrt{x}}{x}\dx=\frac{(\ln x)^2}{2}+C \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p><b>Es falsa.</b> Como \(\ln\sqrt{x}=\frac12\ln x\), con \(u=\ln x\) queda \(\frac12\int u\du\).</p>
+        \[ \frac{(\ln x)^2}{4}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">B3</p>
+      \[ \int\sen^2x\dx=\frac{\sen^3x}{3}+C \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p><b>Es falsa.</b> Al derivar lo propuesto sale \(\sen^2x\cos x\). Hay que bajar la potencia con \(\sen^2x=\frac{1-\cos 2x}{2}\).</p>
+        \[ \frac{x}{2}-\frac{\sen 2x}{4}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">B4</p>
+      \[ \int\tan^2x\dx=\tan x-x+C \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p><b>Es verdadera.</b> Con \(\tan^2x=\sec^2x-1\) se integra directo, y derivar confirma.</p>
+        \[ \tan x-x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">B5</p>
+      \[ \int xe^{x^2}\dx=e^{x^2}+C \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p><b>Es falsa.</b> Al derivar lo propuesto sale \(2xe^{x^2}\). Con \(u=x^2\) aparece un \(\frac12\).</p>
+        \[ \frac12e^{x^2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">B6</p>
+      \[ \int\sinh x\cosh x\dx=\frac{\cosh^2x}{2}+C \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p><b>Es verdadera.</b> Derivando: \(\cosh x\sinh x\). También vale \(\frac{\sinh^2x}{2}+C\), porque difieren en una constante.</p>
+        \[ \frac{\cosh^2x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">B7</p>
+      \[ \int\frac{\ln x}{x^2}\dx=-\frac{\ln x+1}{x}+C \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p><b>Es verdadera.</b> Por partes con \(w=\ln x\), \(dv=x^{-2}\dx\). Derivar lo propuesto confirma.</p>
+        \[ -\frac{\ln x+1}{x}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">B8</p>
+      \[ \int\frac{dx}{x^2+1}=\ln\left(x^2+1\right)+C \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p><b>Es falsa.</b> Al derivar lo propuesto sale \(\frac{2x}{x^2+1}\). Esta es la fórmula de arcotangente.</p>
+        \[ \arctan x+C \]
+      </div></details>
+    </div>
+  </div>
+  <div class="type-head"><h3 style="margin-top:0">Ejercicio 2: partes y cíclicas</h3></div>
+  <p>Usa \(u=\ln x\) si hay logaritmo adentro y \(x=e^u\). En las cíclicas, aplica partes dos veces y despeja.</p>
+  <div class="sheet">
+    <div class="item"><p class="item-id">C1</p>
+      \[ \int e^{3x}\sen 2x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Cíclica, con \(a=3\), \(b=2\) y \(a^2+b^2=13\).</p>
+        \[ \frac{e^{3x}(3\sen 2x-2\cos 2x)}{13}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C2</p>
+      \[ \int e^{-x}\cos x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Cíclica con \(a=-1\): cuida los signos al integrar \(e^{-x}\).</p>
+        \[ \frac{e^{-x}(\sen x-\cos x)}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C3</p>
+      \[ \int\sen(2\ln x)\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=\ln x\), queda \(\int e^u\sen 2u\du\), y \(5I=e^u(\sen 2u-2\cos 2u)\).</p>
+        \[ \frac{x}{5}\left[\sen(2\ln x)-2\cos(2\ln x)\right]+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C4</p>
+      \[ \int\cos(3\ln x)\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=\ln x\), queda \(\int e^u\cos 3u\du\), y \(10I=e^u(\cos 3u+3\sen 3u)\).</p>
+        \[ \frac{x}{10}\left[\cos(3\ln x)+3\sen(3\ln x)\right]+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C5</p>
+      \[ \int\cos^3(\ln x)\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=\ln x\) y \(\cos^3u=\frac{3\cos u+\cos 3u}{4}\), salen dos cíclicas.</p>
+        \[ x\left[\frac{3(\cos\ln x+\sen\ln x)}{8}+\frac{\cos(3\ln x)+3\sen(3\ln x)}{40}\right]+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C6</p>
+      \[ \int x^2\sen(\ln x)\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>\(x^2\dx\) se vuelve \(e^{3u}\du\), así que queda \(\int e^{3u}\sen u\du\).</p>
+        \[ \frac{x^3}{10}\left[3\sen(\ln x)-\cos(\ln x)\right]+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C7</p>
+      \[ \int\frac{\sen(\ln x)}{x^2}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>\(\frac{dx}{x^2}\) se vuelve \(e^{-u}\du\). El denominador no es \(x\), así que sigue siendo cíclica.</p>
+        \[ -\frac{\sen(\ln x)+\cos(\ln x)}{2x}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C8</p>
+      \[ \int\frac{\cos^2(\ln x)}{x}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Hay \(\frac1x\): con \(u=\ln x\) queda \(\int\cos^2u\du\), sin partes.</p>
+        \[ \frac{\ln x}{2}+\frac{\sen(2\ln x)}{4}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C9</p>
+      \[ \int\ln\left(x^2+1\right)\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes con \(dv=dx\). Luego \(\frac{2x^2}{x^2+1}=2-\frac{2}{x^2+1}\).</p>
+        \[ x\ln\left(x^2+1\right)-2x+2\arctan x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C10</p>
+      \[ \int\arctan x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes con \(w=\arctan x\), \(dv=dx\).</p>
+        \[ x\arctan x-\frac12\ln\left(1+x^2\right)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C11</p>
+      \[ \int\arcsen x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes con \(w=\arcsen x\), \(dv=dx\). Queda una sustitución simple.</p>
+        \[ x\arcsen x+\sqrt{1-x^2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C12</p>
+      \[ \int x^2e^x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes dos veces, bajando la potencia de \(x\).</p>
+        \[ e^x\left(x^2-2x+2\right)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C13</p>
+      \[ \int x^2\cos x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes dos veces con \(w=x^2\). Cuida los signos.</p>
+        \[ x^2\sen x+2x\cos x-2\sen x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C14</p>
+      \[ \int x^2\ln x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>El logaritmo es \(w\), aunque la potencia sea más grande.</p>
+        \[ \frac{x^3}{3}\ln x-\frac{x^3}{9}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C15</p>
+      \[ \int\sec^3x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes con \(w=\sec x\), \(dv=\sec^2x\dx\). Es cíclica: reaparece \(\int\sec^3x\dx\).</p>
+        \[ \frac12\left(\sec x\tan x+\ln|\sec x+\tan x|\right)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C16</p>
+      \[ \int x\sec^2x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes con \(w=x\), \(dv=\sec^2x\dx\).</p>
+        \[ x\tan x+\ln|\cos x|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C17</p>
+      \[ \int e^{\sqrt{x}}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(w=\sqrt{x}\), \(dx=2w\dw\), queda \(2\int we^w\dw\).</p>
+        \[ 2e^{\sqrt{x}}\left(\sqrt{x}-1\right)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">C18</p>
+      \[ \int\frac{\ln x}{\sqrt{x}}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes con \(w=\ln x\), \(dv=x^{-1/2}\dx\).</p>
+        \[ 2\sqrt{x}\ln x-4\sqrt{x}+C \]
+      </div></details>
+    </div>
+  </div>
+  <div class="type-head"><h3 style="margin-top:0">Ejercicio 3: sustitución trigonométrica</h3></div>
+  <p>Primero revisa si una sustitución simple resuelve. Si no, elige seno, tangente o secante según la raíz.</p>
+  <div class="sheet">
+    <div class="item"><p class="item-id">D1</p>
+      \[ \int\frac{dx}{x^2\sqrt{16-x^2}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=4\sen\theta\), queda \(\frac{1}{16}\int\csc^2\theta\dth\).</p>
+        \[ -\frac{\sqrt{16-x^2}}{16x}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D2</p>
+      \[ \int\frac{\sqrt{4-x^2}}{x^2}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=2\sen\theta\), queda \(\int\cot^2\theta\dth=\int(\csc^2\theta-1)\dth\).</p>
+        \[ -\frac{\sqrt{4-x^2}}{x}-\arcsen\frac{x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D3</p>
+      \[ \int\frac{x^2}{\sqrt{9-x^2}}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=3\sen\theta\), queda \(9\int\sen^2\theta\dth\). Abre \(\sen 2\theta\) para volver a \(x\).</p>
+        \[ \frac92\arcsen\frac{x}{3}-\frac{x}{2}\sqrt{9-x^2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D4</p>
+      \[ \int\frac{x^3}{\sqrt{4-x^2}}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>La potencia impar permite sustitución simple: \(u=4-x^2\), \(x^2=4-u\).</p>
+        \[ -4\sqrt{4-x^2}+\frac{\left(4-x^2\right)^{3/2}}{3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D5</p>
+      \[ \int\frac{dx}{x\sqrt{4-x^2}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=2\sen\theta\), queda \(\frac12\int\csc\theta\dth=\frac12\ln|\csc\theta-\cot\theta|\).</p>
+        \[ \frac12\ln\left|\frac{2-\sqrt{4-x^2}}{x}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D6</p>
+      \[ \int\sqrt{x^2+9}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=3\tan\theta\), queda \(9\int\sec^3\theta\dth\).</p>
+        \[ \frac{x}{2}\sqrt{x^2+9}+\frac92\ln\left|x+\sqrt{x^2+9}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D7</p>
+      \[ \int\frac{dx}{\sqrt{x^2+4}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=2\tan\theta\), queda \(\int\sec\theta\dth\).</p>
+        \[ \ln\left|x+\sqrt{x^2+4}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D8</p>
+      \[ \int\frac{dx}{\left(x^2+4\right)^{3/2}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=2\tan\theta\), queda \(\frac14\int\cos\theta\dth\).</p>
+        \[ \frac{x}{4\sqrt{x^2+4}}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D9</p>
+      \[ \int\frac{x^2}{\sqrt{x^2+1}}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=\tan\theta\), queda \(\int(\sec^3\theta-\sec\theta)\dth\).</p>
+        \[ \frac{x}{2}\sqrt{x^2+1}-\frac12\ln\left|x+\sqrt{x^2+1}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D10</p>
+      \[ \int\frac{dx}{\sqrt{x^2-4}}\qquad(x>2) \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=2\sec\theta\), queda \(\int\sec\theta\dth\).</p>
+        \[ \ln\left|x+\sqrt{x^2-4}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D11</p>
+      \[ \int\frac{\sqrt{x^2-4}}{x}\dx\qquad(x>2) \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=2\sec\theta\), queda \(2\int\tan^2\theta\dth=2(\tan\theta-\theta)\), con \(\cos\theta=\frac{2}{x}\).</p>
+        \[ \sqrt{x^2-4}-2\arccos\frac{2}{x}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D12</p>
+      \[ \int\frac{dx}{\left(x^2-4\right)^{3/2}}\qquad(x>2) \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=2\sec\theta\), queda \(\frac14\int\frac{\cos\theta}{\sen^2\theta}\dth\).</p>
+        \[ -\frac{x}{4\sqrt{x^2-4}}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D13</p>
+      \[ \int\frac{dx}{\sqrt{3-2x-x^2}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Completa el cuadrado: \(3-2x-x^2=4-(x+1)^2\).</p>
+        \[ \arcsen\frac{x+1}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D14</p>
+      \[ \int\frac{dx}{\sqrt{x^2+2x+5}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Completa el cuadrado: \((x+1)^2+4\). Con \(u=x+1\) es la forma de tangente.</p>
+        \[ \ln\left|x+1+\sqrt{x^2+2x+5}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D15</p>
+      \[ \int\sqrt{1-4x^2}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>El cuadrado es \((2x)^2\): usa \(2x=\sen\theta\), \(dx=\frac12\cos\theta\dth\).</p>
+        \[ \frac14\arcsen 2x+\frac{x}{2}\sqrt{1-4x^2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">D16</p>
+      \[ \int e^x\sqrt{1-e^{2x}}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Primero \(u=e^x\). Queda \(\int\sqrt{1-u^2}\du\), y luego \(u=\sen\theta\).</p>
+        \[ \frac12\arcsen e^x+\frac12e^x\sqrt{1-e^{2x}}+C \]
+      </div></details>
+    </div>
+  </div>
+  <div class="type-head"><h3 style="margin-top:0">Ejercicio 4: fracciones parciales</h3></div>
+  <p>Revisa los grados, revisa si arriba está la derivada, simplifica y luego factoriza.</p>
+  <div class="sheet">
+    <div class="item"><p class="item-id">E1</p>
+      \[ \int\frac{dx}{x^2-4} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \((x-2)(x+2)\), sale \(A=\frac14\) y \(B=-\frac14\).</p>
+        \[ \frac14\ln\left|\frac{x-2}{x+2}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E2</p>
+      \[ \int\frac{3x+1}{x^2+x-2}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \((x-1)(x+2)\), al evaluar sale \(A=\frac43\) y \(B=\frac53\).</p>
+        \[ \frac43\ln|x-1|+\frac53\ln|x+2|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E3</p>
+      \[ \int\frac{x^2}{x^2+1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Grados iguales: súmale y réstale 1 arriba, y queda \(1-\frac{1}{x^2+1}\).</p>
+        \[ x-\arctan x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E4</p>
+      \[ \int\frac{x^3}{x^2-1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Divide: \(x+\frac{x}{x^2-1}\). El segundo sale con sustitución.</p>
+        \[ \frac{x^2}{2}+\frac12\ln\left|x^2-1\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E5</p>
+      \[ \int\frac{x^4}{x^2-1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Divide: \(x^2+1+\frac{1}{x^2-1}\).</p>
+        \[ \frac{x^3}{3}+x+\frac12\ln\left|\frac{x-1}{x+1}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E6</p>
+      \[ \int\frac{dx}{x^2(x+1)} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>\(x\) repetido lleva dos términos: \(-\frac1x+\frac{1}{x^2}+\frac{1}{x+1}\).</p>
+        \[ -\ln|x|-\frac1x+\ln|x+1|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E7</p>
+      \[ \int\frac{dx}{x(x-1)^2} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Queda \(\frac1x-\frac{1}{x-1}+\frac{1}{(x-1)^2}\).</p>
+        \[ \ln|x|-\ln|x-1|-\frac{1}{x-1}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E8</p>
+      \[ \int\frac{dx}{x^3+1} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \((x+1)(x^2-x+1)\), hay que acomodar el numerador y completar el cuadrado.</p>
+        \[ \frac13\ln|x+1|-\frac16\ln\left(x^2-x+1\right)+\frac{1}{\sqrt3}\arctan\frac{2x-1}{\sqrt3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E9</p>
+      \[ \int\frac{dx}{x^3+8} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \((x+2)(x^2-2x+4)\) y \(x^2-2x+4=(x-1)^2+3\).</p>
+        \[ \frac{1}{12}\ln|x+2|-\frac{1}{24}\ln\left(x^2-2x+4\right)+\frac{1}{4\sqrt3}\arctan\frac{x-1}{\sqrt3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E10</p>
+      \[ \int\frac{x}{x^3-1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \((x-1)(x^2+x+1)\), sale \(A=\frac13\), \(B=-\frac13\), \(D=\frac13\).</p>
+        \[ \frac13\ln|x-1|-\frac16\ln\left(x^2+x+1\right)+\frac{1}{\sqrt3}\arctan\frac{2x+1}{\sqrt3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E11</p>
+      \[ \int\frac{x+1}{x^2+1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Sepárala en dos: \(\frac{x}{x^2+1}+\frac{1}{x^2+1}\).</p>
+        \[ \frac12\ln\left(x^2+1\right)+\arctan x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E12</p>
+      \[ \int\frac{2x+3}{x^2+4x+8}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Escribe \(2x+3=(2x+4)-1\) y completa \((x+2)^2+4\).</p>
+        \[ \ln\left(x^2+4x+8\right)-\frac12\arctan\frac{x+2}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E13</p>
+      \[ \int\frac{dx}{\left(x^2+1\right)^2} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Cuadrático repetido: con \(x=\tan\theta\), queda \(\int\cos^2\theta\dth\).</p>
+        \[ \frac12\left(\frac{x}{x^2+1}+\arctan x\right)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E14</p>
+      \[ \int\frac{x^3}{x^4-1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>No hace falta factorizar: arriba está casi la derivada de abajo.</p>
+        \[ \frac14\ln\left|x^4-1\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E15</p>
+      \[ \int\frac{x}{x^4-1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=x^2\), queda \(\frac12\int\frac{du}{u^2-1}\).</p>
+        \[ \frac14\ln\left|\frac{x^2-1}{x^2+1}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E16</p>
+      \[ \int\frac{x^2}{x^4-1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Queda \(\frac12\left(\frac{1}{x^2-1}+\frac{1}{x^2+1}\right)\).</p>
+        \[ \frac14\ln\left|\frac{x-1}{x+1}\right|+\frac12\arctan x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E17</p>
+      \[ \int\frac{x^3+x}{x^4-1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Simplifica primero: \(\frac{x\left(x^2+1\right)}{\left(x^2-1\right)\left(x^2+1\right)}=\frac{x}{x^2-1}\).</p>
+        \[ \frac12\ln\left|x^2-1\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E18</p>
+      \[ \int\frac{\cos x}{\sen^2x+3\sen x+2}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=\sen x\), queda \(\int\frac{du}{(u+1)(u+2)}\).</p>
+        \[ \ln\left|\frac{\sen x+1}{\sen x+2}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E19</p>
+      \[ \int\frac{dx}{e^x-1} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Multiplica arriba y abajo por \(e^{-x}\), o usa \(\frac{1}{e^x-1}=\frac{e^x}{e^x-1}-1\).</p>
+        \[ \ln\left|e^x-1\right|-x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">E20</p>
+      \[ \int\frac{dx}{x+\sqrt{x}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(w=\sqrt{x}\), \(dx=2w\dw\), queda \(\int\frac{2\dw}{w+1}\).</p>
+        \[ 2\ln\left(1+\sqrt{x}\right)+C \]
+      </div></details>
+    </div>
+  </div>
+  <div class="type-head"><h3 style="margin-top:0">Ejercicio 5: hiperbólicas</h3></div>
+  <p>Con potencia impar, separa y sustituye. Con pares, baja con ángulo doble. Revisa los signos.</p>
+  <div class="sheet">
+    <div class="item"><p class="item-id">F1</p>
+      \[ \int\sinh x\cosh^2x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(w=\cosh x\), \(dw=\sinh x\dx\).</p>
+        \[ \frac{\cosh^3x}{3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F2</p>
+      \[ \int\sinh^3x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Usa \(\sinh^2x=\cosh^2x-1\) y \(w=\cosh x\).</p>
+        \[ \frac{\cosh^3x}{3}-\cosh x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F3</p>
+      \[ \int\sinh^4x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Baja dos veces: \(\sinh^4x=\frac38-\frac12\cosh 2x+\frac18\cosh 4x\).</p>
+        \[ \frac{3x}{8}-\frac{\sinh 2x}{4}+\frac{\sinh 4x}{32}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F4</p>
+      \[ \int\sinh^2x\cosh^4x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Agrupa \(\frac14\sinh^22x\cdot\frac{1+\cosh 2x}{2}\). Queda una parte par y otra con \(w=\sinh 2x\).</p>
+        \[ \frac{\sinh 4x}{64}-\frac{x}{16}+\frac{\sinh^32x}{48}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F5</p>
+      \[ \int\tanh x\,\sech^2x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(w=\tanh x\), \(dw=\sech^2x\dx\).</p>
+        \[ \frac{\tanh^2x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F6</p>
+      \[ \int\tanh^2x\,\sech^4x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Separa \(\sech^2x\), cambia el otro por \(1-\tanh^2x\) y usa \(w=\tanh x\).</p>
+        \[ \frac{\tanh^3x}{3}-\frac{\tanh^5x}{5}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F7</p>
+      \[ \int\tanh^3x\,\sech^3x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(w=\sech x\), \(dw=-\sech x\tanh x\dx\), y \(\tanh^2x=1-w^2\).</p>
+        \[ -\frac{\sech^3x}{3}+\frac{\sech^5x}{5}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F8</p>
+      \[ \int\coth x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Escribe \(\frac{\cosh x}{\sinh x}\): arriba está la derivada de abajo.</p>
+        \[ \ln|\sinh x|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F9</p>
+      \[ \int\coth x\,\csch^2x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(w=\coth x\), \(\csch^2x\dx=-dw\).</p>
+        \[ -\frac{\coth^2x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F10</p>
+      \[ \int\coth^3x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Usa \(\coth^2x=1+\csch^2x\): queda \(\int\coth x\dx+\int\coth x\csch^2x\dx\).</p>
+        \[ \ln|\sinh x|-\frac{\coth^2x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F11</p>
+      \[ \int\coth^4x\,\csch^4x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Como en el modelo 2: \(\csch^2x=w^2-1\), con \(w=\coth x\) y \(dw=-\csch^2x\dx\).</p>
+        \[ -\frac{\coth^7x}{7}+\frac{\coth^5x}{5}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F12</p>
+      \[ \int\sech x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Escribe \(\frac{\cosh x}{\cosh^2x}=\frac{\cosh x}{1+\sinh^2x}\), con \(w=\sinh x\).</p>
+        \[ \arctan(\sinh x)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F13</p>
+      \[ \int\csch x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con la definición y \(u=e^x\), o con \(\sinh x=2\sinh\frac{x}{2}\cosh\frac{x}{2}\).</p>
+        \[ \ln\left|\tanh\frac{x}{2}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F14</p>
+      \[ \int e^x\cosh x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con la definición: \(\frac12\int\left(e^{2x}+1\right)\dx\).</p>
+        \[ \frac{e^{2x}}{4}+\frac{x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F15</p>
+      \[ \int e^x\cosh 2x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con la definición: \(\frac12\int\left(e^{3x}+e^{-x}\right)\dx\).</p>
+        \[ \frac{e^{3x}}{6}-\frac{e^{-x}}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F16</p>
+      \[ \int x\sinh x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes con \(w=x\). Aquí \(\int\sinh x\dx\) es \(+\cosh x\).</p>
+        \[ x\cosh x-\sinh x+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F17</p>
+      \[ \int\sinh(\ln x)\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con la definición, \(\sinh(\ln x)=\frac{x-\frac1x}{2}\). Es un polinomio disfrazado.</p>
+        \[ \frac{x^2}{4}-\frac{\ln x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F18</p>
+      \[ \int\cosh(2\ln x)\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con la definición, \(\cosh(2\ln x)=\frac{x^2+x^{-2}}{2}\).</p>
+        \[ \frac{x^3}{6}-\frac{1}{2x}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F19</p>
+      \[ \int\frac{\sinh x}{1+\cosh x}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Arriba está la derivada de abajo.</p>
+        \[ \ln(1+\cosh x)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F20</p>
+      \[ \int\frac{dx}{1+\cosh x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Usa \(1+\cosh x=2\cosh^2\frac{x}{2}\).</p>
+        \[ \tanh\frac{x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">F21</p>
+      \[ \int\sinh 2x\cosh 3x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Usa \(\sinh a\cosh b=\frac12\left[\sinh(a+b)+\sinh(a-b)\right]\).</p>
+        \[ \frac{\cosh 5x}{10}-\frac{\cosh x}{2}+C \]
+      </div></details>
+    </div>
+  </div>
+  <div class="type-head"><h3 style="margin-top:0">Ejercicio 6: seno y coseno abajo</h3></div>
+  <p>Usa \(t=\tan(x/2)\), o revisa antes si hay un camino más corto. Aquí \(t\) siempre es \(\tan(x/2)\).</p>
+  <div class="sheet">
+    <div class="item"><p class="item-id">G1</p>
+      \[ \int\frac{dx}{1-\cos x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>El denominador queda \(\frac{2t^2}{1+t^2}\), así que resta \(\int t^{-2}\dt\).</p>
+        \[ -\cot\frac{x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G2</p>
+      \[ \int\frac{dx}{1-\sen x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Abajo se forma \((1-t)^2\).</p>
+        \[ \frac{2}{1-\tan(x/2)}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G3</p>
+      \[ \int\frac{dx}{2+\cos x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Abajo queda \(3+t^2\): es arcotangente con \(a=\sqrt3\).</p>
+        \[ \frac{2}{\sqrt3}\arctan\frac{\tan(x/2)}{\sqrt3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G4</p>
+      \[ \int\frac{dx}{3+2\cos x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Abajo queda \(5+t^2\).</p>
+        \[ \frac{2}{\sqrt5}\arctan\frac{\tan(x/2)}{\sqrt5}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G5</p>
+      \[ \int\frac{dx}{5-3\cos x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>El signo cambia: abajo queda \(2+8t^2\).</p>
+        \[ \frac12\arctan\left(2\tan\frac{x}{2}\right)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G6</p>
+      \[ \int\frac{dx}{4+5\sen x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Abajo queda \(2(2t+1)(t+2)\): se factoriza y sale logaritmo.</p>
+        \[ \frac13\ln\left|\frac{2\tan(x/2)+1}{\tan(x/2)+2}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G7</p>
+      \[ \int\frac{dx}{3+5\sen x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Abajo queda \((3t+1)(t+3)\).</p>
+        \[ \frac14\ln\left|\frac{3\tan(x/2)+1}{\tan(x/2)+3}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G8</p>
+      \[ \int\frac{dx}{13+5\sen x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Abajo queda \(13t^2+10t+13\). Completa el cuadrado.</p>
+        \[ \frac16\arctan\frac{13\tan(x/2)+5}{12}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G9</p>
+      \[ \int\frac{dx}{3\sen x+4\cos x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Abajo queda \(4+6t-4t^2=2(2-t)(1+2t)\).</p>
+        \[ \frac15\ln\left|\frac{1+2\tan(x/2)}{2-\tan(x/2)}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G10</p>
+      \[ \int\frac{dx}{2+\sen x+\cos x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Abajo queda \(t^2+2t+3=(t+1)^2+2\).</p>
+        \[ \sqrt2\arctan\frac{\tan(x/2)+1}{\sqrt2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G11</p>
+      \[ \int\frac{\sen x}{1+\cos x}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=1+\cos x\). No necesitas \(t=\tan(x/2)\).</p>
+        \[ -\ln(1+\cos x)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G12</p>
+      \[ \int\frac{\sen x}{1+\sen x}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Súmale y réstale 1 arriba: \(1-\frac{1}{1+\sen x}\).</p>
+        \[ x+\frac{2}{1+\tan(x/2)}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G13</p>
+      \[ \int\frac{\cos x}{2+\cos x}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Súmale y réstale 2 arriba: \(1-\frac{2}{2+\cos x}\).</p>
+        \[ x-\frac{4}{\sqrt3}\arctan\frac{\tan(x/2)}{\sqrt3}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G14</p>
+      \[ \int\sec x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Multiplica arriba y abajo por \(\sec x+\tan x\): arriba queda la derivada de abajo.</p>
+        \[ \ln|\sec x+\tan x|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G15</p>
+      \[ \int\csc x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(t=\tan(x/2)\), queda \(\int\frac{dt}{t}\).</p>
+        \[ \ln\left|\tan\frac{x}{2}\right|+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G16</p>
+      \[ \int\frac{dx}{5+3\cos(x/2)} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Primero \(w=\frac{x}{2}\), \(dx=2\dw\). Luego es el ejercicio 6 del parcial.</p>
+        \[ \arctan\left(\frac12\tan\frac{x}{4}\right)+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G17</p>
+      \[ \int\frac{dx}{4\cos^2x+9\sen^2x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Hay cuadrados: conviene \(t=\tan x\). Divide arriba y abajo entre \(\cos^2x\).</p>
+        \[ \frac16\arctan\frac{3\tan x}{2}+C \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">G18</p>
+      \[ \int\frac{dx}{1+\cos^2x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(t=\tan x\), abajo queda \(2+t^2\).</p>
+        \[ \frac{1}{\sqrt2}\arctan\frac{\tan x}{\sqrt2}+C \]
+      </div></details>
+    </div>
+  </div>
+  <div class="type-head"><h3 style="margin-top:0">Integrales definidas</h3></div>
+  <p>No aparecen en tu PDF. Halla la antiderivada, cambia los límites si sustituyes y evalúa \(F(b)-F(a)\).</p>
+  <div class="sheet">
+    <div class="item"><p class="item-id">H1</p>
+      \[ \int_1^e\ln x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes: \(\left[x\ln x-x\right]_1^e=0-(-1)\).</p>
+        \[ 1 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H2</p>
+      \[ \int_0^1xe^x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes: \(\left[xe^x-e^x\right]_0^1=0-(-1)\).</p>
+        \[ 1 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H3</p>
+      \[ \int_0^{\pi}x\sen x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes: \(\left[-x\cos x+\sen x\right]_0^{\pi}\).</p>
+        \[ \pi \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H4</p>
+      \[ \int_1^e(\ln x)^2\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con la antiderivada de la concha 2.7: \(\left[x\ln^2x-2x\ln x+2x\right]_1^e\).</p>
+        \[ e-2 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H5</p>
+      \[ \int_0^1\arctan x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Partes: \(\left[x\arctan x-\frac12\ln\left(1+x^2\right)\right]_0^1\).</p>
+        \[ \frac{\pi}{4}-\frac{\ln 2}{2} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H6</p>
+      \[ \int_0^{3/2}\frac{dx}{\sqrt{9-x^2}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Directa: \(\left[\arcsen\frac{x}{3}\right]_0^{3/2}=\arcsen\frac12\).</p>
+        \[ \frac{\pi}{6} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H7</p>
+      \[ \int_2^3\frac{dx}{x^2-1} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Fracciones: \(\frac12\left[\ln\left|\frac{x-1}{x+1}\right|\right]_2^3=\frac12\left(\ln\frac12-\ln\frac13\right)\).</p>
+        \[ \frac12\ln\frac32 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H8</p>
+      \[ \int_0^1\frac{x}{x^2+1}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=x^2+1\), los límites son 1 y 2.</p>
+        \[ \frac{\ln 2}{2} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H9</p>
+      \[ \int_0^1\frac{dx}{x^2+2x+2} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Completa \((x+1)^2+1\): \(\left[\arctan(x+1)\right]_0^1\).</p>
+        \[ \arctan 2-\frac{\pi}{4} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H10</p>
+      \[ \int_0^{\pi/2}\sen^3x\cos^2x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=\cos x\), los límites pasan a 1 y 0: \(\int_0^1\left(u^2-u^4\right)\du\).</p>
+        \[ \frac{2}{15} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H11</p>
+      \[ \int_0^{\pi/2}\cos^2x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>\(\left[\frac{x}{2}+\frac{\sen 2x}{4}\right]_0^{\pi/2}\).</p>
+        \[ \frac{\pi}{4} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H12</p>
+      \[ \int_0^{\ln 2}\sinh x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>\(\cosh(\ln 2)-1\), con \(\cosh(\ln 2)=\frac{2+\frac12}{2}=\frac54\).</p>
+        \[ \frac14 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H13</p>
+      \[ \int_0^{\ln 2}\sinh^2x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>\(\left[\frac{\sinh 2x}{4}-\frac{x}{2}\right]_0^{\ln 2}\), con \(\sinh(2\ln 2)=\frac{4-\frac14}{2}=\frac{15}{8}\).</p>
+        \[ \frac{15}{32}-\frac{\ln 2}{2} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H14</p>
+      \[ \int_0^{\pi/2}\frac{dx}{2+\cos x} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(t=\tan(x/2)\), los límites son 0 y 1: \(\frac{2}{\sqrt3}\arctan\frac{1}{\sqrt3}\).</p>
+        \[ \frac{\pi}{3\sqrt3} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H15</p>
+      \[ \int_0^2\left|x^2-1\right|\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Parte en \(x=1\): \(\int_0^1\left(1-x^2\right)\dx+\int_1^2\left(x^2-1\right)\dx=\frac23+\frac43\).</p>
+        \[ 2 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H16</p>
+      \[ \int_{-1}^{1}e^{|x|}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Es par: \(2\int_0^1e^x\dx\).</p>
+        \[ 2(e-1) \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H17</p>
+      \[ \int_{-2}^{2}\left(x^3+x^2\right)\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>\(x^3\) es impar y se anula. \(x^2\) es par: \(2\int_0^2x^2\dx\).</p>
+        \[ \frac{16}{3} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H18</p>
+      \[ \int_{-1}^{1}x^2\sinh x\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Es impar y los límites son simétricos.</p>
+        \[ 0 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H19</p>
+      \[ \int_0^{\pi}\sqrt{1-\sen^2x}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>La raíz es \(|\cos x|\), no \(\cos x\): \(2\int_0^{\pi/2}\cos x\dx\).</p>
+        \[ 2 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H20</p>
+      \[ \int_0^1x\sqrt{1-x^2}\dx \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(u=1-x^2\), los límites pasan a 1 y 0.</p>
+        \[ \frac13 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H21</p>
+      \[ \int_1^4\frac{dx}{x+\sqrt{x}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>\(\left[2\ln\left(1+\sqrt{x}\right)\right]_1^4=2\ln 3-2\ln 2\).</p>
+        \[ 2\ln\frac32 \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H22</p>
+      \[ \int_{\sqrt2}^{2}\frac{dx}{x^2\sqrt{x^2-1}} \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Con \(x=\sec\theta\), la antiderivada es \(\frac{\sqrt{x^2-1}}{x}\).</p>
+        \[ \frac{\sqrt3-\sqrt2}{2} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H23</p>
+      \[ H(x)=\int_{x}^{x^2}\frac{e^t}{t}\dt,\quad\text{halle }H'(x) \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Regla de Leibniz: evalúa en el límite de arriba por su derivada, y resta el de abajo por la suya.</p>
+        \[ H'(x)=\frac{2e^{x^2}-e^x}{x} \]
+      </div></details>
+    </div>
+    <div class="item"><p class="item-id">H24</p>
+      \[ K(x)=x\int_0^x\sen\left(t^2\right)\dt,\quad\text{halle }K'(x) \]
+      <details><summary>Ver cómo se resuelve</summary><div class="sol">
+        <p>Es un producto: usa la regla del producto y el Teorema Fundamental.</p>
+        \[ K'(x)=\int_0^x\sen\left(t^2\right)\dt+x\sen\left(x^2\right) \]
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section id="resuelto">
+  <p class="eyebrow">Paso 5</p>
+  <h2>Parcial real resuelto</h2>
+  <p>Este es el primer modelo de tu PDF. Tápate cada solución e inténtala si te animas; si todavía no puedes, cópiala a mano y explica en voz alta por qué se da cada paso.</p>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 1</strong><span class="pts">5 pts</span></div>
+    <p>Determine la veracidad mediante a) la definición de antiderivada y b) técnicas de integración:</p>
+    \[ \int\frac{3\ln(x^2)}{x}\dx=3(\ln x)^2+C \]
+    <div class="signal"><b>Señal</b><p>Definición de antiderivada significa: \(F\) es antiderivada de \(f\) si \(F'=f\). O sea, derivas el resultado y lo comparas.</p></div>
+    <ol class="steps">
+      <li>Simplifica el integrando con la propiedad \(\ln(x^2)=2\ln x\), para \(x>0\):
+        \[ \frac{3\ln(x^2)}{x}=\frac{6\ln x}{x} \]</li>
+      <li><b>a)</b> Deriva el resultado con la regla de la cadena:
+        \[ \frac{d}{dx}\left[3(\ln x)^2+C\right]=6\ln x\cdot\frac1x=\frac{6\ln x}{x} \]
+        Coincide con el integrando.</li>
+      <li><b>b)</b> Integra con \(u=\ln x\), \(du=\dfrac{dx}{x}\):
+        \[ 6\int\frac{\ln x}{x}\dx=6\int u\du=3u^2+C=3(\ln x)^2+C \]</li>
+    </ol>
+    <div class="fin"><b>Conclusión</b>La afirmación es verdadera para \(x>0\), y las dos vías llegan a lo mismo.</div>
+    <div class="trap"><b>Error común</b><p>Responder solo «verdadero». Piden justificar por las dos vías, y el examen exige justificar cada respuesta.</p></div>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 2</strong><span class="pts">5 pts</span></div>
+    \[ \int\cos^2(\ln x)\dx \]
+    <div class="signal"><b>Señal</b><p>El \(\ln x\) está dentro del coseno, pero no hay un \(\frac1x\) afuera. Se usa \(u=\ln x\) y se despeja \(x=e^u\), lo que hace aparecer un \(e^u\).</p></div>
+    <ol class="steps">
+      <li>Cambia de variable: \(u=\ln x\), \(x=e^u\), \(dx=e^u\du\).
+        \[ \int e^u\cos^2u\du \]</li>
+      <li>Baja la potencia con \(\cos^2u=\dfrac{1+\cos 2u}{2}\):
+        \[ \frac12\int e^u\du+\frac12\underbrace{\int e^u\cos 2u\du}_{I} \]</li>
+      <li>Resuelve \(I\) por partes, con \(w=\cos 2u\), \(dv=e^u\du\):
+        \[ I=e^u\cos 2u+2\int e^u\sen 2u\du \]</li>
+      <li>Otra vez por partes, con \(w=\sen 2u\), \(dv=e^u\du\). Reaparece \(I\):
+        \[ I=e^u\cos 2u+2\left(e^u\sen 2u-2I\right) \]</li>
+      <li>Despeja \(I\) como una ecuación común:
+        \[ 5I=e^u(\cos 2u+2\sen 2u)\quad\Rightarrow\quad I=\frac{e^u(\cos 2u+2\sen 2u)}{5} \]</li>
+      <li>Junta todo y vuelve a \(x\), con \(e^u=x\) y \(u=\ln x\).</li>
+    </ol>
+    <div class="fin"><b>Resultado</b>\[ \frac{x}{2}+\frac{x}{10}\left[\cos(2\ln x)+2\sen(2\ln x)\right]+C \]</div>
+    <div class="trap"><b>Error común</b><p>Hacer partes una tercera vez. Cuando reaparece \(I\), detente y despeja.</p></div>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 3</strong><span class="pts">5 pts</span></div>
+    \[ \int\frac{dx}{x^2\sqrt{9-x^2}} \]
+    <div class="signal"><b>Señal</b><p>La forma \(\sqrt{a^2-x^2}\), aquí con \(a=3\), pide \(x=a\sen\theta\), porque \(1-\sen^2\theta=\cos^2\theta\) elimina la raíz.</p></div>
+    <ol class="steps">
+      <li>Sustituye \(x=3\sen\theta\), \(dx=3\cos\theta\dth\). La raíz queda:
+        \[ \sqrt{9-9\sen^2\theta}=3\cos\theta \]</li>
+      <li>Reemplaza y simplifica:
+        \[ \int\frac{3\cos\theta\dth}{9\sen^2\theta\cdot 3\cos\theta}=\frac19\int\csc^2\theta\dth=-\frac19\cot\theta+C \]</li>
+      <li>Vuelve a \(x\). De \(\sen\theta=\dfrac{x}{3}\), dibuja el triángulo: cateto opuesto \(x\), hipotenusa \(3\), cateto adyacente \(\sqrt{9-x^2}\). Por eso:
+        \[ \cot\theta=\frac{\text{adyacente}}{\text{opuesto}}=\frac{\sqrt{9-x^2}}{x} \]</li>
+    </ol>
+    <div class="fin"><b>Resultado</b>\[ -\frac{\sqrt{9-x^2}}{9x}+C \]</div>
+    <div class="trap"><b>Error común</b><p>Dejar la respuesta en \(\theta\). La integral empezó en \(x\) y debe terminar en \(x\).</p></div>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 4</strong><span class="pts">5 pts</span></div>
+    \[ \int\frac{-x^2+4x+8}{x^3-8}\dx \]
+    <div class="signal"><b>Señal</b><p>Fracción de polinomios con el grado de arriba menor. Se factoriza abajo con \(a^3-b^3=(a-b)(a^2+ab+b^2)\).</p></div>
+    <ol class="steps">
+      <li>Factoriza: \(x^3-8=(x-2)(x^2+2x+4)\). El factor cuadrático no se puede factorizar más, porque su discriminante es negativo. Lleva numerador lineal:
+        \[ \frac{-x^2+4x+8}{(x-2)(x^2+2x+4)}=\frac{A}{x-2}+\frac{Bx+D}{x^2+2x+4} \]</li>
+      <li>Quita denominadores:
+        \[ -x^2+4x+8=A(x^2+2x+4)+(Bx+D)(x-2) \]</li>
+      <li>Con \(x=2\): \(12=12A\), así que \(A=1\). Comparando \(x^2\): \(1+B=-1\), así que \(B=-2\). Comparando términos independientes: \(4-2D=8\), así que \(D=-2\).</li>
+      <li>La segunda fracción tiene arriba justo la derivada del denominador, \(2x+2\):
+        \[ \int\frac{dx}{x-2}-\int\frac{2x+2}{x^2+2x+4}\dx \]</li>
+    </ol>
+    <div class="fin"><b>Resultado</b>\[ \ln|x-2|-\ln\left(x^2+2x+4\right)+C \]</div>
+    <div class="trap"><b>Error común</b><p>Poner solo una constante sobre el factor cuadrático. Encima de un cuadrático irreducible siempre va \(Bx+D\).</p></div>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 5</strong><span class="pts">5 pts</span></div>
+    \[ \int\sinh^2x\,\cosh^2x\dx \]
+    <div class="signal"><b>Señal</b><p>Producto de potencias pares. Se reduce igual que en trigonometría, usando ángulo doble.</p></div>
+    <ol class="steps">
+      <li>Agrupa, usando \(\sinh x\cosh x=\tfrac12\sinh 2x\):
+        \[ \sinh^2x\cosh^2x=\frac14\sinh^2 2x \]</li>
+      <li>Baja la potencia con \(\sinh^2 y=\dfrac{\cosh 2y-1}{2}\), para \(y=2x\):
+        \[ \frac14\cdot\frac{\cosh 4x-1}{2}=\frac{\cosh 4x-1}{8} \]</li>
+      <li>Integra, recordando dividir entre 4 por la regla de la cadena:
+        \[ \frac18\left(\frac{\sinh 4x}{4}-x\right)+C \]</li>
+    </ol>
+    <div class="fin"><b>Resultado</b>\[ \frac{\sinh 4x}{32}-\frac{x}{8}+C \]</div>
+    <div class="trap"><b>Error común</b><p>Usar el signo de la identidad trigonométrica. En hiperbólicas, \(\sinh^2\) lleva \(\cosh 2x-1\), no \(1-\cosh 2x\).</p></div>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 6</strong><span class="pts">5 pts</span></div>
+    \[ \int\frac{dx}{5+3\cos x} \]
+    <div class="signal"><b>Señal</b><p>Un número más seno o coseno en el denominador. La sustitución \(t=\tan(x/2)\) lo convierte en fracción de polinomios. Memoriza estas tres fórmulas:</p>
+    \[ \sen x=\frac{2t}{1+t^2},\qquad\cos x=\frac{1-t^2}{1+t^2},\qquad dx=\frac{2\dt}{1+t^2} \]</div>
+    <ol class="steps">
+      <li>Reemplaza:
+        \[ \int\frac{1}{5+3\cdot\frac{1-t^2}{1+t^2}}\cdot\frac{2\dt}{1+t^2} \]</li>
+      <li>Multiplica arriba y abajo por \(1+t^2\). El denominador queda \(5(1+t^2)+3(1-t^2)=8+2t^2\):
+        \[ \int\frac{2\dt}{8+2t^2}=\int\frac{dt}{4+t^2} \]</li>
+      <li>Usa la fórmula de arcotangente con \(a=2\) y vuelve a \(x\).</li>
+    </ol>
+    <div class="fin"><b>Resultado</b>\[ \frac12\arctan\left(\frac{\tan(x/2)}{2}\right)+C \]</div>
+    <div class="trap"><b>Error común</b><p>Olvidar cambiar el \(dx\). El factor \(\frac{2}{1+t^2}\) es lo que hace que todo simplifique.</p></div>
+  </div>
+</section>
+
+<section id="tu-parcial">
+  <p class="eyebrow">Paso 6 · 30 puntos</p>
+  <h2>Tu parcial nuevo</h2>
+  <p>Tiene la misma estructura que el real, con dos cambios a propósito: el ejercicio 1 ahora es falso, y los ejercicios 3 y 6 son integrales definidas. Justifica cada respuesta. Antes de abrir una pista, intenta el ejercicio durante unos minutos.</p>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 1</strong><span class="pts">5 pts</span></div>
+    <p>Determine la veracidad mediante a) la definición de antiderivada y b) técnicas de integración:</p>
+    \[ \int\frac{2\ln(x^3)}{x}\dx=6(\ln x)^2+C \]
+    <details><summary>Pista 1</summary><div class="sol"><p>Baja el exponente del logaritmo: \(\ln(x^3)=3\ln x\).</p></div></details>
+    <details><summary>Pista 2</summary><div class="sol"><p>Deriva \(6(\ln x)^2\) y compáralo con el integrando. Después integra con \(u=\ln x\).</p></div></details>
+    <details><summary>Ver solución</summary><div class="sol">
+      <p>El integrando es \(\dfrac{6\ln x}{x}\).</p>
+      <p><b>a)</b> La derivada del resultado propuesto no coincide con el integrando:</p>
+      \[ \frac{d}{dx}\left[6(\ln x)^2+C\right]=\frac{12\ln x}{x}\ne\frac{6\ln x}{x} \]
+      <p><b>b)</b> Con \(u=\ln x\), \(du=\dfrac{dx}{x}\):</p>
+      \[ 6\int u\du=3u^2+C=3(\ln x)^2+C \]
+      <p><b>La afirmación es falsa.</b> El resultado correcto es \(3(\ln x)^2+C\).</p>
+    </div></details>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 2</strong><span class="pts">5 pts</span></div>
+    \[ \int\cos^2(2\ln x)\dx \]
+    <details><summary>Pista 1</summary><div class="sol"><p>Usa \(u=\ln x\), \(x=e^u\), \(dx=e^u\du\). Queda \(\int e^u\cos^2(2u)\du\).</p></div></details>
+    <details><summary>Pista 2</summary><div class="sol"><p>Usa \(\cos^2(2u)=\dfrac{1+\cos 4u}{2}\). Luego, partes dos veces en \(\int e^u\cos 4u\du\), hasta que reaparezca.</p></div></details>
+    <details><summary>Ver solución</summary><div class="sol">
+      <p>La integral queda:</p>
+      \[ \frac12\int e^u\du+\frac12 I,\qquad I=\int e^u\cos 4u\du \]
+      <p>Con partes dos veces:</p>
+      \[ I=e^u\cos 4u+4\left(e^u\sen 4u-4I\right)\quad\Rightarrow\quad 17I=e^u(\cos 4u+4\sen 4u) \]
+      <p>Al volver a \(x\):</p>
+      \[ \frac{x}{2}+\frac{x}{34}\left[\cos(4\ln x)+4\sen(4\ln x)\right]+C \]
+    </div></details>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 3</strong><span class="pts">5 pts</span></div>
+    \[ \int_2^{2\sqrt3}\frac{dx}{x^2\sqrt{16-x^2}} \]
+    <details><summary>Pista 1</summary><div class="sol"><p>Aquí \(a=4\): usa \(x=4\sen\theta\) y simplifica hasta tener un múltiplo de \(\csc^2\theta\).</p></div></details>
+    <details><summary>Pista 2</summary><div class="sol"><p>Cambia los límites: de \(\sen\theta=\dfrac{x}{4}\), con \(x=2\) sale \(\theta=\dfrac{\pi}{6}\), y con \(x=2\sqrt3\) sale \(\theta=\dfrac{\pi}{3}\).</p></div></details>
+    <details><summary>Ver solución</summary><div class="sol">
+      <p>Con \(dx=4\cos\theta\dth\) y \(\sqrt{16-x^2}=4\cos\theta\):</p>
+      \[ \frac{1}{16}\int_{\pi/6}^{\pi/3}\csc^2\theta\dth=\frac{1}{16}\left[-\cot\theta\right]_{\pi/6}^{\pi/3} \]
+      <p>Como \(\cot\frac{\pi}{6}=\sqrt3\) y \(\cot\frac{\pi}{3}=\frac{1}{\sqrt3}\):</p>
+      \[ \frac{1}{16}\left(\sqrt3-\frac{1}{\sqrt3}\right)=\frac{1}{16}\cdot\frac{2}{\sqrt3}=\frac{\sqrt3}{24} \]
+    </div></details>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 4</strong><span class="pts">5 pts</span></div>
+    \[ \int\frac{4x^2-2x+4}{x^3+8}\dx \]
+    <details><summary>Pista 1</summary><div class="sol"><p>Es una suma de cubos: \(x^3+8=(x+2)(x^2-2x+4)\).</p></div></details>
+    <details><summary>Pista 2</summary><div class="sol"><p>Plantea \(\dfrac{A}{x+2}+\dfrac{Bx+D}{x^2-2x+4}\) y usa \(x=-2\) para hallar \(A\) rápido.</p></div></details>
+    <details><summary>Ver solución</summary><div class="sol">
+      <p>Con \(x=-2\): \(24=12A\), así que \(A=2\). Comparando \(x^2\): \(2+B=4\), así que \(B=2\). Comparando términos independientes: \(8+2D=4\), así que \(D=-2\).</p>
+      \[ \int\frac{2}{x+2}\dx+\int\frac{2x-2}{x^2-2x+4}\dx \]
+      <p>El segundo numerador es la derivada del denominador:</p>
+      \[ 2\ln|x+2|+\ln\left(x^2-2x+4\right)+C \]
+    </div></details>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 5</strong><span class="pts">5 pts</span></div>
+    \[ \int\sinh^3x\,\cosh^2x\dx \]
+    <details><summary>Pista 1</summary><div class="sol"><p>Hay una potencia impar. Separa un \(\sinh x\), que será parte de \(dw\).</p></div></details>
+    <details><summary>Pista 2</summary><div class="sol"><p>Cambia lo que queda con \(\sinh^2x=\cosh^2x-1\) y usa \(w=\cosh x\).</p></div></details>
+    <details><summary>Ver solución</summary><div class="sol">
+      <p>Con \(w=\cosh x\), \(dw=\sinh x\dx\):</p>
+      \[ \int(\cosh^2x-1)\cosh^2x\,\sinh x\dx=\int\left(w^4-w^2\right)\dw \]
+      \[ \frac{\cosh^5x}{5}-\frac{\cosh^3x}{3}+C \]
+    </div></details>
+  </div>
+
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicio 6</strong><span class="pts">5 pts</span></div>
+    \[ \int_0^{\pi/2}\frac{dx}{5+4\cos x} \]
+    <details><summary>Pista 1</summary><div class="sol"><p>Usa \(t=\tan(x/2)\) con las tres fórmulas del ejercicio 6 resuelto.</p></div></details>
+    <details><summary>Pista 2</summary><div class="sol"><p>Cambia los límites: con \(x=0\) sale \(t=0\), y con \(x=\dfrac{\pi}{2}\) sale \(t=\tan\dfrac{\pi}{4}=1\).</p></div></details>
+    <details><summary>Ver solución</summary><div class="sol">
+      <p>El denominador queda \(5(1+t^2)+4(1-t^2)=9+t^2\):</p>
+      \[ \int_0^1\frac{2\dt}{9+t^2}=\frac23\left[\arctan\frac{t}{3}\right]_0^1=\frac23\arctan\frac13 \]
+    </div></details>
+  </div>
+</section>
+
+<section id="modelo-2">
+  <p class="eyebrow">Paso 7</p>
+  <h2>Simulacro con el modelo real 2</h2>
+  <p>Es la segunda versión de tu PDF. Hazla sin apuntes y con reloj. Aquí solo está el resultado final, para que te corrijas al terminar. El ejercicio 1 es igual al del modelo que ya resolviste, así que empieza por el 2.</p>
+  <div class="sheet">
+    <div class="q-head"><strong>Ejercicios 2 a 6</strong><span class="pts">5 pts c/u</span></div>
+    \[ \text{2) }\int\sen^2(\ln x)\dx\qquad\text{3) }\int\frac{dx}{x^2\sqrt{1-x^2}}\qquad\text{4) }\int\frac{4x\dx}{x^4-1} \]
+    \[ \text{5) }\int\coth^2x\,\csch^4x\dx\qquad\text{6) }\int\frac{dx}{5+4\sen x} \]
+    <details><summary>Pista para los que cambian</summary><div class="sol">
+      <p><b>Ejercicio 4:</b> \(u=x^2\) lo convierte en \(2\int\dfrac{du}{u^2-1}\), y luego fracciones parciales.</p>
+      <p><b>Ejercicio 5:</b> separa un \(\csch^2x\), cambia el otro por \(\coth^2x-1\) y usa \(w=\coth x\).</p>
+      <p><b>Ejercicio 6:</b> después de \(t=\tan(x/2)\), completa el cuadrado en \(5t^2+8t+5\).</p>
+    </div></details>
+    <details><summary>Ver resultados finales</summary><div class="sol">
+      \[ \text{2) }\frac{x}{2}-\frac{x}{10}\left[\cos(2\ln x)+2\sen(2\ln x)\right]+C \]
+      \[ \text{3) }-\frac{\sqrt{1-x^2}}{x}+C \]
+      \[ \text{4) }\ln\left|\frac{x^2-1}{x^2+1}\right|+C \]
+      \[ \text{5) }-\frac{\coth^5x}{5}+\frac{\coth^3x}{3}+C \]
+      \[ \text{6) }\frac23\arctan\left(\frac{5\tan(x/2)+4}{3}\right)+C \]
+    </div></details>
+  </div>
+  <p class="note" style="margin-top:1rem">Para revisar cualquier resultado, deriva tu respuesta: debe darte el integrando. Si llegaste a otra forma, puede estar bien igualmente; dos respuestas correctas pueden diferir en una constante.</p>
+</section>
+
+</main>
